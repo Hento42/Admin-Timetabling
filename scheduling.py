@@ -63,9 +63,9 @@ def schedule(pJobs, pStaff, pHours, day):
         
         for job in pJobs:
             if job[4] == maxPriority:
-                currentList.append(job)             # Generates a 2D list for ech priority level
+                currentList.append(job)     # Generates a 2D list for ech priority level
                 
-        jobStack.push(currentList)                  # Pushes this list to the stack, then increments down the max priority
+        jobStack.push(currentList)          # Pushes this list to the stack, then decreases the max priority
         maxPriority -= 1
     
     # Placeholder for the scheduling algorithm        
