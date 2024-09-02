@@ -21,7 +21,6 @@ class Stack(object):
 
 # Subprogram for a recursive merge sort to sort the jobs by priority    
 def mergeSort(numList):
-    newList = []
     leftList = []
     rightList = []
     if len(numList) > 1:
@@ -30,24 +29,24 @@ def mergeSort(numList):
         rightList = numList[mid:]
         mergeSort(rightList)       
         mergeSort(leftList) 
-        i = 0; j = 0; k = 0
-        while i < len(leftList) and j < len(rightList):
-            if leftList[i] < rightList[j]:
-                numList[k] = leftList[i]
-                i += 1
+        a = 0; b = 0; c = 0
+        while a < len(leftList) and b < len(rightList):
+            if leftList[a] < rightList[b]:
+                numList[c] = leftList[a]
+                a += 1
             else:
-                numList[k] = rightList[j]
-                j += 1
-            k += 1
+                numList[c] = rightList[b]
+                b += 1
+            c += 1
 
-        while i < len(leftList):
-            numList[k] = leftList[i]
-            i += 1
-            k += 1
+        while a < len(leftList):
+            numList[c] = leftList[a]
+            a += 1; c += 1
 
-        while j < len(rightList):
-            numList[k] = rightList[j]
-            j += 1; k += 1
+        while b < len(rightList):
+            numList[c] = rightList[b]
+            b += 1; c += 1
+    
 
 
 # Subprogram for the scheduling part of the program, so it can be imported into and called by main.py
@@ -57,7 +56,7 @@ def schedule(pJobs, pStaff, pHours, day):
     mergeSort(priorities)                           
     maxPriority = priorities[-1]                    # Sorts the priorities and finds  the largest
     jobStack = Stack([])
-    
+
     while maxPriority >= 0:
         currentList = []
         
