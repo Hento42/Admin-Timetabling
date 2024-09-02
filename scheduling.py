@@ -1,4 +1,4 @@
-# Creates a stack data structure to store the jobs in priority order
+# Creates a stack data structure to store the jobs in a LIFO priority order
 class Stack(object):
     def __init__(self,items):
         self.__items = items
@@ -17,6 +17,29 @@ class Stack(object):
         self.__top -= 1
         print(item)
         return item
+
+
+# Creates a queue data structure to store the jobs in a FIFO priority order    
+class Queue(object):
+    def __init__(self,items):
+        self.__items = items
+        self.__len = len(items) - 1
+
+    def isEmpty(self):
+        return self.__len == 0
+
+    def deQueue(self):
+        if not self.isEmpty():
+            item = self.__items[0]
+            del(self.__items[0])
+            self.__len -= 1
+            return item
+        else:
+            return -1
+
+    def enQueue(self,item):
+        self.__items.append(item)    
+        self.__len += 1
 
 
 # Subprogram for a recursive merge sort to sort the jobs by priority    
