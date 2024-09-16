@@ -13,11 +13,11 @@ editor.execute("CREATE TABLE StaffDetails ("
                 "MonFinish time,"
                 "TueStart time,"
                 "TueFinish time," 
-              "WedStart time,"
+                "WedStart time,"
                 "WedFinish time,"
                 "ThurStart time,"
                 "ThurFinish time,"
-               "FriStart time,"
+                "FriStart time,"
                 "FriFinish time)")
 
 editor.execute("""INSERT INTO StaffDetails VALUES
