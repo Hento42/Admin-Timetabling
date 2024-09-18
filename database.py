@@ -59,13 +59,27 @@ editor = con.cursor()   # Linking to the database
 #7               "PRIMARY KEY (StaffCode, StartDate))")
 
 
-editor.execute("CREATE TABLE Attendance ("
-               "StaffCode INTEGER PRIMARY KEY,"
-               "Monday TEXT,"
-               "Tuesday TEXT,"
-               "Wednesday TEXT,"
-               "Thursday TEXT,"
-               "Friday TEXT)")
+#9editor.execute("CREATE TABLE Attendance ("
+#9               "StaffCode INTEGER PRIMARY KEY,"
+#9               "Monday TEXT,"
+#9               "Tuesday TEXT,"
+#9               "Wednesday TEXT,"
+#9               "Thursday TEXT,"
+#9               "Friday TEXT)")
+
+
+
+
+
+editor.execute("CREATE TABLE Levels ("
+               "LEVEL INTEGER PRIMARY KEY,"
+               "Reception BOOLEAN,"
+               "Dispensary BOOLEAN,"
+               "Admin BOOLEAN,"
+               "Scripts BOOLEAN,"
+               "Hurley BOOLEAN,"
+               "Scanning BOOLEAN)")
+
 
 editor.execute
 
