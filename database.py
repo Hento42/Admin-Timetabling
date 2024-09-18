@@ -41,21 +41,32 @@ editor = con.cursor()   # Linking to the database
 #4               (3, 'Article Writing', 30, 'MoWeThFr', 2)""")
 
 
-editor.execute("CREATE TABLE Week ("
-               "ID INTEGER PRIMARY KEY,"
-               "DAY TEXT,"
-               "JobCode INTEGER,"
-               "StaffCode INTEGER,"
-               "StartTime time,"
-               "EndTime time)")
+#5editor.execute("CREATE TABLE Week ("
+#5               "ID INTEGER PRIMARY KEY,"
+#5               "DAY TEXT,"
+#5               "JobCode INTEGER,"
+#5               "StaffCode INTEGER,"
+#5               "StartTime time,"
+#5               "EndTime time)")
 
 
-editor.execute("CREATE TABLE AnnualLeave ("
-               "StaffCode INTEGER,"
-               "StartDate date,"
-               "StartTime time,"
-               "EndDate date,"
-               "EndTime time,"
-               "PRIMARY KEY (StaffCode, StartDate))")
+#7editor.execute("CREATE TABLE AnnualLeave ("
+#7               "StaffCode INTEGER,"
+#7               "StartDate date,"
+#7               "StartTime time,"
+#7               "EndDate date,"
+#7               "EndTime time,"
+#7               "PRIMARY KEY (StaffCode, StartDate))")
+
+
+editor.execute("CREATE TABLE Attendance ("
+               "StaffCode INTEGER PRIMARY KEY,"
+               "Monday TEXT,"
+               "Tuesday TEXT,"
+               "Wednesday TEXT,"
+               "Thursday TEXT,"
+               "Friday TEXT)")
+
+editor.execute
 
 con.commit()
