@@ -41,4 +41,21 @@ editor = con.cursor()   # Linking to the database
 #4               (3, 'Article Writing', 30, 'MoWeThFr', 2)""")
 
 
+editor.execute("CREATE TABLE Week ("
+               "ID INTEGER PRIMARY KEY,"
+               "DAY TEXT,"
+               "JobCode INTEGER,"
+               "StaffCode INTEGER,"
+               "StartTime time,"
+               "EndTime time)")
+
+
+editor.execute("CREATE TABLE AnnualLeave ("
+               "StaffCode INTEGER,"
+               "StartDate date,"
+               "StartTime time,"
+               "EndDate date,"
+               "EndTime time,"
+               "PRIMARY KEY (StaffCode, StartDate))")
+
 con.commit()
