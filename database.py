@@ -3,26 +3,42 @@ con = sqlite3.connect("databases.db") # Connecting to the database
 
 editor = con.cursor()   # Linking to the database
 
-editor.execute("CREATE TABLE StaffDetails ("
-                "StaffCode INTEGER PRIMARY KEY,"
-                "FirstName TEXT,"
-                "Surname TEXT,"
-                "Level INTEGER," 
-                "Email TEXT,"
-                "MonStart time,"
-                "MonFinish time,"
-                "TueStart time,"
-                "TueFinish time," 
-                "WedStart time,"
-                "WedFinish time,"
-                "ThurStart time,"
-                "ThurFinish time,"
-                "FriStart time,"
-                "FriFinish time)")
+#1editor.execute("CREATE TABLE StaffDetails ("
+#1                "StaffCode INTEGER PRIMARY KEY,"
+#1                "FirstName TEXT,"
+#1                "Surname TEXT,"
+#1                "Level INTEGER," 
+#1                "Email TEXT,"
+#1                "MonStart time,"
+#1                "MonFinish time,"
+#1                "TueStart time,"
+#1                "TueFinish time," 
+#1                "WedStart time,"
+#1                "WedFinish time,"
+#1                "ThurStart time,"
+#1                "ThurFinish time,"
+#1                "FriStart time,"
+#1                "FriFinish time)")
 
-editor.execute("""INSERT INTO StaffDetails VALUES
-               (1, 'Arthur', 'Dent', 5, 'email@totallyrealemail.com', '10:00:00', '18:00:00', '10:00:00', '18:00:00', '10:00:00', '18:00:00', '10:00:00', '18:00:00', '10:00:00', '18:00:00'),
-               (2, 'Bowerick', 'Wowbagger', 10, 'anotheremail@totallyrealemail.com', '08:00:00', '15:00:00', '08:00:00', '15:00:00', '08:00:00', '15:00:00', '08:00:00', '15:00:00', '08:00:00', '15:00:00'),
-               (3, 'Zaphod', 'Beeblebrox', 1, 'president@theuniverse.com', '11:30:00', '14:00:00', '09:30:00', '10:00:00', '12:00:00', '15:00:00', '08:00:00', '09:00:00', '15:00:00', '16:00:00')""")
+
+#2editor.execute("""INSERT INTO StaffDetails VALUES
+#2               (1, 'Arthur', 'Dent', 5, 'email@totallyrealemail.com', '10:00:00', '18:00:00', '10:00:00', '18:00:00', '10:00:00', '18:00:00', '10:00:00', '18:00:00', '10:00:00', '18:00:00'),
+#2               (2, 'Bowerick', 'Wowbagger', 10, 'anotheremail@totallyrealemail.com', '08:00:00', '15:00:00', '08:00:00', '15:00:00', '08:00:00', '15:00:00', '08:00:00', '15:00:00', '08:00:00', '15:00:00'),
+#2               (3, 'Zaphod', 'Beeblebrox', 1, 'president@theuniverse.com', '11:30:00', '14:00:00', '09:30:00', '10:00:00', '12:00:00', '15:00:00', '08:00:00', '09:00:00', '15:00:00', '16:00:00')""")
+
+
+#3editor.execute("CREATE TABLE Jobs ("
+#3               "JobCode INTEGER PRIMARY KEY,"
+#3               "Job TEXT,"
+#3               "WeekHoursNeeded INTEGER,"
+#3               "DaysNeeded TEXT,"
+#3               "Priority INTEGER)")
+
+
+#4editor.execute("""INSERT INTO Jobs VALUES
+#4               (1, 'President of the Universe', 8, 'MoTuWeTh', 0),
+#4               (2, 'Drinking Tea', 14, 'MoTuWeThFr', 4),
+#4               (3, 'Article Writing', 30, 'MoWeThFr', 2)""")
+
 
 con.commit()
