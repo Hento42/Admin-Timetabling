@@ -108,19 +108,54 @@ for record in theNames:
     print(record)
 
 
-editor.execute("""INSERT INTO Week VALUES
-               (1, 'Monday', 5, 5, '08:00:00', '11:00:00'),
-               (2, 'Tuesday', 3, 4, '11:00:00', '14:00:00'),
-               (3, 'Monday', 1, 3, '11:30:00', '14:00:00'),
-               (4, 'Monday', 6, 5, '11:30:00', '16:00:00'),
-               (5, 'Monday', 7, 6, '10:00:00', '13:00:00'),
-               (6, 'Monday', 3, 6, '13:00:00', '15:30:00'),
-               (7, 'Monday', 4, 2, '08:00:00', '15:00:00'),
-               (8, 'Tuesday', 4, 2, '08:00:00', '15:00:00'),
-               (9, 'Tuesday', 2, 1, '11:00:00', '14:30:00')""")
+#03editor.execute("""INSERT INTO Week VALUES
+#03               (1, 'Monday', 5, 5, '08:00:00', '11:00:00'),
+#03               (2, 'Tuesday', 3, 4, '11:00:00', '14:00:00'),
+#03               (3, 'Monday', 1, 3, '11:30:00', '14:00:00'),
+#03               (4, 'Monday', 6, 5, '11:30:00', '16:00:00'),
+#03               (5, 'Monday', 7, 6, '10:00:00', '13:00:00'),
+#03               (6, 'Monday', 3, 6, '13:00:00', '15:30:00'),
+#03               (7, 'Monday', 4, 2, '08:00:00', '15:00:00'),
+#03               (8, 'Tuesday', 4, 2, '08:00:00', '15:00:00'),
+#03               (9, 'Tuesday', 2, 1, '11:00:00', '14:30:00')""")
 
 
+monJobs = editor.execute("""SELECT FirstName, Surname, Email, Job
+                         FROM Week, StaffDetails, Jobs
+                         WHERE Week.DAY = 'Monday'
+                         AND Week.JobCode = Jobs.JobCode
+                         AND Week.StaffCode = StaffDetails.StaffCode
+                         ORDER BY Surname ASC""")
+
+for record in monJobs.fetchall():
+    print(record)
+
+wowJobs = editor.execute("""SELECT Job, Day, StartTime
+                         FROM Week, Jobs, StaffDetails
+                         WHERE Week.StaffCode = StaffDetails.StaffCode
+                         AND Week.JobCode = Jobs.Jobcode
+                         AND StaffDetails.FirstName = 'Bowerick' 
+                         AND StaffDetails.Surname = 'Wowbagger'
+                         ORDER BY StartTime ASC""")
+
+for record in wowJobs.fetchall():
+    print(record)
 
 
+editor.execute("""UPDATE Week
+               SET StartTime = '09:00:00'
+               WHERE StaffCode = 2
+               AND DAY = 'Monday'""")
 
+
+wowJobs = editor.execute("""SELECT Job, Day, StartTime
+                         FROM Week, Jobs, StaffDetails
+                         WHERE Week.StaffCode = StaffDetails.StaffCode
+                         AND Week.JobCode = Jobs.Jobcode
+                         AND StaffDetails.FirstName = 'Bowerick' 
+                         AND StaffDetails.Surname = 'Wowbagger'
+                         ORDER BY StartTime ASC""")
+
+for record in wowJobs.fetchall():
+    print(record)
 con.commit()
