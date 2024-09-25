@@ -97,5 +97,30 @@ editor = con.cursor()   # Linking to the database
 #7               "Scanning BOOLEAN)")
 
 
+# Experimenting with the tables I have made to work out how they can be read and collaborate
+names = editor.execute("""SELECT FirstName, Surname, Email
+               FROM StaffDetails
+               WHERE Level >= 5
+               ORDER BY Level DESC""")
+theNames = names.fetchall()
+#print(names.fetchone()) # Once fetched for the first time, the variable is cleared
+for record in theNames:
+    print(record)
+
+
+editor.execute("""INSERT INTO Week VALUES
+               (1, 'Monday', 5, 5, '08:00:00', '11:00:00'),
+               (2, 'Tuesday', 3, 4, '11:00:00', '14:00:00'),
+               (3, 'Monday', 1, 3, '11:30:00', '14:00:00'),
+               (4, 'Monday', 6, 5, '11:30:00', '16:00:00'),
+               (5, 'Monday', 7, 6, '10:00:00', '13:00:00'),
+               (6, 'Monday', 3, 6, '13:00:00', '15:30:00'),
+               (7, 'Monday', 4, 2, '08:00:00', '15:00:00'),
+               (8, 'Tuesday', 4, 2, '08:00:00', '15:00:00'),
+               (9, 'Tuesday', 2, 1, '11:00:00', '14:30:00')""")
+
+
+
+
 
 con.commit()
