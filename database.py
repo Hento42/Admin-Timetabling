@@ -50,7 +50,7 @@ editor = con.cursor()   # Linking to the database
 
 #3editor.execute("CREATE TABLE Week ("
 #3               "ID INTEGER PRIMARY KEY,"
-#3               "DAY TEXT,"
+#3               "Day TEXT,"
 #3               "JobCode INTEGER,"
 #3               "StaffCode INTEGER,"
 #3               "StartTime time,"
@@ -122,7 +122,7 @@ editor = con.cursor()   # Linking to the database
 
 #amonJobs = editor.execute("""SELECT FirstName, Surname, Email, Job
 #a                         FROM Week, StaffDetails, Jobs
-#a                         WHERE Week.DAY = 'Monday'
+#a                         WHERE Week.Day = 'Monday'
 #a                         AND Week.JobCode = Jobs.JobCode
 #a                         AND Week.StaffCode = StaffDetails.StaffCode
 #a                         ORDER BY Surname ASC""")
@@ -145,7 +145,7 @@ editor = con.cursor()   # Linking to the database
 #aeditor.execute("""UPDATE Week
 #a               SET StartTime = '09:00:00'
 #a               WHERE StaffCode = 2
-#a               AND DAY = 'Monday'""")
+#a               AND Day = 'Monday'""")
 
 
 #awowJobs = editor.execute("""SELECT Job, Day, StartTime
