@@ -98,14 +98,14 @@ editor = con.cursor()   # Linking to the database
 
 
 # Experimenting with the tables I have made to work out how they can be read and collaborate
-names = editor.execute("""SELECT FirstName, Surname, Email
-               FROM StaffDetails
-               WHERE Level >= 5
-               ORDER BY Level DESC""")
-theNames = names.fetchall()
+#anames = editor.execute("""SELECT FirstName, Surname, Email
+#a               FROM StaffDetails
+#a               WHERE Level >= 5
+#a               ORDER BY Level DESC""")
+#atheNames = names.fetchall()
 #print(names.fetchone()) # Once fetched for the first time, the variable is cleared
-for record in theNames:
-    print(record)
+#afor record in theNames:
+#a    print(record)
 
 
 #03editor.execute("""INSERT INTO Week VALUES
@@ -120,42 +120,44 @@ for record in theNames:
 #03               (9, 'Tuesday', 2, 1, '11:00:00', '14:30:00')""")
 
 
-monJobs = editor.execute("""SELECT FirstName, Surname, Email, Job
-                         FROM Week, StaffDetails, Jobs
-                         WHERE Week.DAY = 'Monday'
-                         AND Week.JobCode = Jobs.JobCode
-                         AND Week.StaffCode = StaffDetails.StaffCode
-                         ORDER BY Surname ASC""")
+#amonJobs = editor.execute("""SELECT FirstName, Surname, Email, Job
+#a                         FROM Week, StaffDetails, Jobs
+#a                         WHERE Week.DAY = 'Monday'
+#a                         AND Week.JobCode = Jobs.JobCode
+#a                         AND Week.StaffCode = StaffDetails.StaffCode
+#a                         ORDER BY Surname ASC""")
 
-for record in monJobs.fetchall():
-    print(record)
+#afor record in monJobs.fetchall():
+#a    print(record)
 
-wowJobs = editor.execute("""SELECT Job, Day, StartTime
-                         FROM Week, Jobs, StaffDetails
-                         WHERE Week.StaffCode = StaffDetails.StaffCode
-                         AND Week.JobCode = Jobs.Jobcode
-                         AND StaffDetails.FirstName = 'Bowerick' 
-                         AND StaffDetails.Surname = 'Wowbagger'
-                         ORDER BY StartTime ASC""")
+#awowJobs = editor.execute("""SELECT Job, Day, StartTime
+#a                         FROM Week, Jobs, StaffDetails
+#a                         WHERE Week.StaffCode = StaffDetails.StaffCode
+#a                         AND Week.JobCode = Jobs.Jobcode
+#a                         AND StaffDetails.FirstName = 'Bowerick' 
+#a                         AND StaffDetails.Surname = 'Wowbagger'
+#a                         ORDER BY StartTime ASC""")
 
-for record in wowJobs.fetchall():
-    print(record)
-
-
-editor.execute("""UPDATE Week
-               SET StartTime = '09:00:00'
-               WHERE StaffCode = 2
-               AND DAY = 'Monday'""")
+#afor record in wowJobs.fetchall():
+#a    print(record)
 
 
-wowJobs = editor.execute("""SELECT Job, Day, StartTime
-                         FROM Week, Jobs, StaffDetails
-                         WHERE Week.StaffCode = StaffDetails.StaffCode
-                         AND Week.JobCode = Jobs.Jobcode
-                         AND StaffDetails.FirstName = 'Bowerick' 
-                         AND StaffDetails.Surname = 'Wowbagger'
-                         ORDER BY StartTime ASC""")
+#aeditor.execute("""UPDATE Week
+#a               SET StartTime = '09:00:00'
+#a               WHERE StaffCode = 2
+#a               AND DAY = 'Monday'""")
 
-for record in wowJobs.fetchall():
-    print(record)
+
+#awowJobs = editor.execute("""SELECT Job, Day, StartTime
+#a                         FROM Week, Jobs, StaffDetails
+#a                         WHERE Week.StaffCode = StaffDetails.StaffCode
+#a                         AND Week.JobCode = Jobs.Jobcode
+#a                         AND StaffDetails.FirstName = 'Bowerick' 
+#a                         AND StaffDetails.Surname = 'Wowbagger'
+#a                         ORDER BY StartTime ASC""")
+
+#afor record in wowJobs.fetchall():
+#a    print(record)
+
+    
 con.commit()
