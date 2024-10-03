@@ -95,20 +95,3 @@ def schedule(pJobs, pStaff, pHours, day):
         pass
     
     
-# Random test data to ensure functionality
-schedule(pJobs=[[1,"Reception",40,["Mon","Tue","Wed","Thur","Fri"],0],
-          [2,"Dispensary",40,["Mon","Tue","Wed","Thur","Fri"],1],
-          [3,"Admin",40,["Mon","Tue","Wed"],0],
-          [4,"Scripts",40,["Mon","Tue","Wed","Thur","Fri"],6],
-          [5,"Job 1",40,["Tue","Wed","Thur","Fri"],4],
-          [6,"Job 2",40,["Mon","Wed","Fri"],5],
-          [7,"Job 3",40,["Mon","Tue","Wed","Thur","Fri"],3],
-          [8,"Job 4",40,["Thur","Fri"],2],
-          [9,"Job 5",40,["Fri"],1],
-          [10,"Job 6",40,["Mon","Tue","Wed","Thur","Fri"],3],
-          [11,"Job 7",40,["Tue","Wed","Thur"],1],
-          [12,"Job 8",40,["Mon"],0]], 
-         pStaff=["aa", "Arthur Dent", [3,4,7,10],
-         ["ab", "Ford Prefect", [2,5,8,10]],
-         ["ac", "Zaphod Beeblebrox", [1,2,3]]],
-         day="Mon", pHours=[]) # pHours left blank currently as is not needed yet and required formatting is currently unknown
