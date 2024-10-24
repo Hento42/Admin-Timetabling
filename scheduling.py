@@ -1,3 +1,9 @@
+import sqlite3
+con = sqlite3.connect("databases.db") # Connecting to the database
+
+editor = con.cursor()   # Linking to the database
+
+
 # Creates a stack data structure to store the jobs in a LIFO priority order
 class Stack(object):
     def __init__(self,items):
@@ -40,6 +46,63 @@ class Queue(object):
     def enQueue(self,item):
         self.__items.append(item)    
         self.__len += 1
+
+
+# Creating the classes for Staff and Jobs, and using inheritance to produce the different types of each
+class Staff(object):
+    def __init__(self,id: int,fName: str,sName: str,level: int,email: str,hours: dict):
+        self.__staffID = id
+        self.__firstName = fName
+        self.__surname = sName
+        self.__level = level
+        self.__email = email
+        self.__hoursWorked = hours
+
+    def getName(self):
+        return self.__staffID, self.__firstName, self.__surname
+    
+    def getEmail(self):
+        return self.__staffID, self.__email
+    
+    def getLevel(self):
+        return self.__staffID, self.__level
+    
+    def getHours(self):
+        return self.__staffID, self.__hoursWorked
+    
+    def linkToJob(self):
+        return self.__staffID, self.__firstName, self.__level
+    
+
+class FullHours(Staff):
+    def __init__(self, id: int, fName: str, sName: str, level: int, email: str, hours: dict):
+        super().__init__(id, fName, sName, level, email, hours)
+    
+
+class Job(object):
+    def __init__(self,code,desc,priority,level):
+        self.__jobCode = code
+        self.__description = desc
+        self.__priority = priority
+        self.__level = level
+
+    def getLevel(self):
+        return self.__jobCode, self.__level
+    
+    def getPriority(self):
+        return self.__jobCode, self.__priority
+
+
+class dailyJob(Job):
+    def __init__(self,dayHours,code,desc,priority,level):
+        self.__hoursPerDay = dayHours
+        super().__init__(code,desc,priority,level)
+
+
+class weeklyJob(Job):
+    def __init__(self, days, hours, code, desc, priority, level):
+        super().__init__(code, desc, priority, level)
+
 
 
 # Subprogram for a recursive merge sort to sort the jobs by priority    
@@ -95,3 +158,4 @@ def schedule(pJobs, pStaff, pHours, day):
         pass
     
     
+con.commit() # Commits all the changes from the program
