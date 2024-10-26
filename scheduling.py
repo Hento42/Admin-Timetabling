@@ -93,15 +93,26 @@ class Job(object):
         return self.__jobCode, self.__priority
 
 
-class dailyJob(Job):
+class DailyJob(Job):
     def __init__(self,dayHours,code,desc,priority,level):
         self.__hoursPerDay = dayHours
         super().__init__(code,desc,priority,level)
 
 
-class weeklyJob(Job):
+class WeeklyJob(Job):
     def __init__(self, days, hours, code, desc, priority, level):
         super().__init__(code, desc, priority, level)
+        
+
+class MonthlyJob(Job):
+    def __init__(self, hoursNeeded, dayNeeded, complete, code, desc, priority, level):
+        super().__init__(code, desc, priority, level)
+        
+        
+class Reception(DailyJob):
+    def __init__(self,desk,dayHours,code,desc,priority,level):
+        self.__desk = desk
+        super().__init__(dayHours,code,desc,priority,level)
 
 
 
