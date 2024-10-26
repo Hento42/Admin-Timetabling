@@ -50,7 +50,7 @@ class Queue(object):
 
 # Creating the classes for Staff and Jobs, and using inheritance to produce the different types of each
 class Staff(object):
-    def __init__(self,id: int,fName: str,sName: str,level: int,email: str,hours: dict):
+    def __init__(self, id, fName, sName, level, email, hours):
         self.__staffID = id
         self.__firstName = fName
         self.__surname = sName
@@ -75,7 +75,21 @@ class Staff(object):
     
 
 class FullHours(Staff):
-    def __init__(self, id: int, fName: str, sName: str, level: int, email: str, hours: dict):
+    def __init__(self, id, fName, sName, level, email, hours):
+        super().__init__(id, fName, sName, level, email, hours)
+        
+        
+class SplitHours(Staff):
+    def __init__(self, id, fName, sName, level, email, hours, splitStart, splitEnd):
+        self.__splitHoursStart = splitStart
+        self.__splitHoursEnd = splitEnd
+        super().__init__(id, fName, sName, level, email, hours)
+        
+        
+class ZeroHours(Staff):
+    def __init__(self, id, fName, sName, level, email, hours, startTime, endTime):
+        self.__startTime = startTime
+        self.__endTime = endTime
         super().__init__(id, fName, sName, level, email, hours)
     
 
