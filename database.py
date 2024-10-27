@@ -11,7 +11,7 @@ editor.execute("CREATE TABLE StaffDetails ("
                 "Hurley INTEGER,"
                 "Scripts INTEGER,"
                 "Admin INTEGER,"
-                "Scanning INTEGER," 
+                "WorkflowScanning INTEGER," 
                 "Email TEXT,"
                 "MonStart time,"
                 "MonFinish time,"
@@ -28,7 +28,9 @@ editor.execute("CREATE TABLE StaffDetails ("
 editor.execute("CREATE TABLE Jobs ("
                "JobCode INTEGER PRIMARY KEY,"
                "Job TEXT,"
-               "WeekHoursNeeded INTEGER,"
+               "Type TEXT,"
+               "HoursNeeded INTEGER,"
+               "HourType INTEGER"
                "DaysNeeded TEXT,"
                "Priority INTEGER)")
 
@@ -122,5 +124,27 @@ editor.execute("""INSERT INTO ZeroHours VALUES
                (14, 2, "08:00:00", "18:30:00"),
                (14, 3, "08:00:00", "18:30:00"),
                (14, 5, "08:00:00", "18:30:00")""")
+
+
+editor.execute("""INSERT INTO Jobs VALUES
+               (0, "Reception 1", "D", 10.5, 1, "ALL", 1),
+               (1, "Reception 2", "D", 10.5, 0, "ALL", 0),
+               (2, "Reception 3", "D", 10.5, 2, "ALL", 3),
+               (3, "Reception 4", "D", 10.5, 3, "SOME", 5),
+               (4, "Dispensary", "D", 10.5, 0, "ALL", 0),
+               (5, "Dispensary Help", "D", 2, 10.5, "SOME", 2),
+               (6, "Hurley 1", "D", 10.5, 0, "ALL", 0),
+               (7, "Hurley 2", "D", 10.5, 1, "ALL", 1),
+               (8, "Hurley 3", "W", 10.5, 2, "ANY", 3),
+               (9, "Admin 1", "D", 10.5, 1, "ALL", 0),
+               (10, "Admin 2", "D", 10.5, 1, "ALL", 1),
+               (11, "Extra Admin 1", "D", 10.5, 3, "ALL", 4),
+               (12, "Extra Admin 2", "D", 10.5, 3, "All", 5),
+               (13, "Non-Workflow Scanning", "W", 2, 0, "ANY", 3),
+               (14, "Workflow Scanning", ...),
+               (15, "Weekly Scripts", "W", 4, 1, "Fr", 2),
+               (16, "Monthly Scripts", "M", 2, 1, "TDB", 2),
+               (17, "New Registrations", "W", 3, 2, "ANY", 2)""")
+
 
 con.commit()
