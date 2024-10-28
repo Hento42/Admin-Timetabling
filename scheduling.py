@@ -49,14 +49,17 @@ class Queue(object):
 
 
 # Creating the classes for Staff and Jobs, and using inheritance to produce the different types of each
+# In the "setter" methods, I have used a system to return 1 if successful, and 0 if not. 
+# This will allow the code to navigate any potential errors encountered in the execution of the method.
 class Staff(object):
-    def __init__(self, id, fName, sName, level, email, hours):
+    def __init__(self, id:int, fName:str, sName:str, level:dict, email:str, hours:list, attendance:dict):
         self.__staffID = id
         self.__firstName = fName
         self.__surname = sName
         self.__level = level
         self.__email = email
         self.__hoursWorked = hours
+        self.__attendance = attendance
 
     def getName(self):
         return self.__staffID, self.__firstName, self.__surname
@@ -70,13 +73,55 @@ class Staff(object):
     def getHours(self):
         return self.__staffID, self.__hoursWorked
     
+    def getAttendance(self):
+        return self.__staffID, self.__attendance
+    
     def linkToJob(self):
         return self.__staffID, self.__firstName, self.__level
+    
+    def changeSurname(self, surname):
+        if len(surname) > 0:
+            self.__surname = surname
+            return 1
+        else:
+            return 0
+
+    def changeLevel(self,levelType,newLevel):
+        valid = False
+        try:
+            if newLevel >= 0 and newLevel <= 3 and int(newLevel) == newLevel:
+                valid = True
+
+        except Exception:
+            return 0
+        keys = self.__level.keys()
+        if levelType in keys and valid:
+            self.__level(levelType) = newLevel
+            return 1
+        else:
+            return 0
+
+    def changeEmail(self,newEmail):
+        self.__email = newEmail
+        return 1
+
+    def changeAttendance(self,day,newAttendance):
+        if newAttendance == True or newAttendance == False:
+            keys = self.__attendance.keys()
+            if day in keys:
+                self.__attendance = newAttendance
+                return 1
+            else:
+                return 0
+        else:
+            return 0
     
 
 class FullHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours):
         super().__init__(id, fName, sName, level, email, hours)
+
+    
         
         
 class SplitHours(Staff):
