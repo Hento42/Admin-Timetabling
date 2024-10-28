@@ -102,8 +102,11 @@ class Staff(object):
             return 0
 
     def changeEmail(self,newEmail):
-        self.__email = newEmail
-        return 1
+        if len(newEmail) > 0:
+            self.__newEmail = newEmail
+            return 1
+        else:
+            return 0
 
     def changeAttendance(self,day,newAttendance):
         if newAttendance == True or newAttendance == False:
