@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, re
 con = sqlite3.connect("databases.db") # Connecting to the database
 
 editor = con.cursor()   # Linking to the database
@@ -58,7 +58,7 @@ class Staff(object):
         self.__surname = sName
         self.__level = level
         self.__email = email
-        self.__hoursWorked = hours
+        self._hoursWorked = hours
         self.__attendance = attendance
 
     def getName(self):
@@ -71,7 +71,7 @@ class Staff(object):
         return self.__staffID, self.__level
     
     def getHours(self):
-        return self.__staffID, self.__hoursWorked
+        return self.__staffID, self._hoursWorked
     
     def getAttendance(self):
         return self.__staffID, self.__attendance
@@ -96,7 +96,7 @@ class Staff(object):
             return 0
         keys = self.__level.keys()
         if levelType in keys and valid:
-            self.__level(levelType) = newLevel
+            self.__level[levelType] = newLevel
             return 1
         else:
             return 0
@@ -121,24 +121,45 @@ class Staff(object):
     
 
 class FullHours(Staff):
-    def __init__(self, id, fName, sName, level, email, hours):
-        super().__init__(id, fName, sName, level, email, hours)
+    def __init__(self, id, fName, sName, level, email, hours, attendance):
+        super().__init__(id, fName, sName, level, email, hours, attendance)
 
-    
+    def changeHours(self, dayInt, newStartTime, newEndTime):
+        valid = []
+        if not str(dayInt).isdigit():
+            return 0
+        if (newStartTime != "" or newEndTime != ""):
+            valid = re.findall("[0-1][0-8]:[0-5][0-9]:[0-5][0-9]",newStartTime+","+newEndTime)
+            if newEndTime == "" or newStartTime == "":
+                valid.append("")
+        if  len(valid) == 2:
+            if dayInt < 0 or dayInt > 4 or (int(dayInt) != dayInt):
+                return 0
+            elif newStartTime == "":
+                self._hoursWorked[dayInt] = [self._hoursWorked[dayInt][0], newEndTime]
+                return 1
+            elif newEndTime == "":
+                self._hoursWorked[dayInt] = [newStartTime, self._hoursWorked[dayInt][1]]
+                return 1
+            else:
+                self._hoursWorked[dayInt] = [newStartTime, newEndTime]
+        else:
+            return 0
+
         
         
 class SplitHours(Staff):
-    def __init__(self, id, fName, sName, level, email, hours, splitStart, splitEnd):
+    def __init__(self, id, fName, sName, level, email, hours, attendance, splitStart:dict, splitEnd:dict):
         self.__splitHoursStart = splitStart
         self.__splitHoursEnd = splitEnd
-        super().__init__(id, fName, sName, level, email, hours)
+        super().__init__(id, fName, sName, level, email, hours, attendance)
         
         
 class ZeroHours(Staff):
-    def __init__(self, id, fName, sName, level, email, hours, startTime, endTime):
+    def __init__(self, id, fName, sName, level, email, hours, attendance, startTime, endTime):
         self.__startTime = startTime
         self.__endTime = endTime
-        super().__init__(id, fName, sName, level, email, hours)
+        super().__init__(id, fName, sName, level, email, hours, attendance)
     
 
 class Job(object):
