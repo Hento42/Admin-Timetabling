@@ -129,7 +129,7 @@ class FullHours(Staff):
         if not str(dayInt).isdigit():
             return 0
         if (newStartTime != "" or newEndTime != ""):
-            valid = re.findall("[0-1][0-8]:[0-5][0-9]:[0-5][0-9]",newStartTime+","+newEndTime)
+            valid = re.findall("[0-1][0-9]:[0-5][0-9]:[0-5][0-9]",newStartTime+","+newEndTime)
             if newEndTime == "" or newStartTime == "":
                 valid.append("")
         if  len(valid) == 2:
