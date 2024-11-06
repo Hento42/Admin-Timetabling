@@ -60,6 +60,7 @@ class Staff(object):
         self.__email = email
         self._hoursWorked = hours
         self.__attendance = attendance
+        self.__type = ""
 
     def getName(self):
         return self.__staffID, self.__firstName, self.__surname
@@ -75,6 +76,9 @@ class Staff(object):
     
     def getAttendance(self):
         return self.__staffID, self.__attendance
+    
+    def getType(self):
+        return self.__staffID, self.__type
     
     def linkToJob(self):
         return self.__staffID, self.__firstName, self.__level
@@ -140,11 +144,11 @@ class Staff(object):
                 self._hoursWorked[dayInt] = [newStartTime, newEndTime]
         else:
             return 0
-
+    
     
 
 class FullHours(Staff):
-    def __init__(self, id, fName, sName, level, email, hours, attendance):
+    def __init__(self, id:int, fName:str, sName:str, level:dict, email:str, hours:list, attendance:dict):
         self.__type = "Full"
         super().__init__(id, fName, sName, level, email, hours, attendance)
 
@@ -174,7 +178,7 @@ class SplitHours(Staff):
         
         
 class ZeroHours(Staff):
-    def __init__(self, id, fName, sName, level, email, hours, attendance, startTime, endTime):
+    def __init__(self, id, fName, sName, level, email, hours, attendance, startTime:list, endTime:list):
         self.__startTime = startTime
         self.__endTime = endTime
         self.__type = "Zero"
@@ -196,39 +200,78 @@ class ZeroHours(Staff):
 
     
 class Job(object):
-    def __init__(self,code,desc,priority,level):
-        self.__jobCode = code
+    def __init__(self,code:int,desc:str,priority:int,level:int,levelNum:int):
+        self._jobCode = code
         self.__description = desc
         self.__priority = priority
         self.__level = level
+        self.__levelNum = levelNum
 
     def getLevel(self):
-        return self.__jobCode, self.__level
+        return self._jobCode, self.__level, self.__levelNum
     
     def getPriority(self):
-        return self.__jobCode, self.__priority
+        return self._jobCode, self.__priority
+
+    def getDescription(self):
+        return self._jobCode, self.__description
+
+    def changePriority(self, newPriority):
+        try:
+            int(newPriority)
+        except ValueError:
+            return 0
+        else:
+            if newPriority == int(newPriority):
+                self.__priority = newPriority
+                return 1
+            else:
+                return 0
+
+    def changeLevel(self,newLevel):
+        valid = True
+        try:
+            if int(newLevel) == newLevel and newLevel >= 0 and newLevel <= 0:
+                pass
+            else:
+                valid = False
+        except Exception:
+            return 0
+        else:
+            if valid:
+                self.__level = newLevel
+                return 1          
+            else:
+                return 0  
 
 
 class DailyJob(Job):
-    def __init__(self,dayHours,code,desc,priority,level):
+    def __init__(self,dayHours:int,code,desc,priority,level,levelNum):
         self.__hoursPerDay = dayHours
-        super().__init__(code,desc,priority,level)
+        super().__init__(code,desc,priority,level,levelNum)
+
+    def getHours(self):
+        return self._jobCode, self.__hoursPerDay
+        
+    def changeDailyHours(self,newhours):
+        if str(newhours).isdecimal() and newhours >= 0 and newhours <= 10.5:
+            self.__hoursPerDay = newhours
 
 
 class WeeklyJob(Job):
-    def __init__(self, days, hours, code, desc, priority, level):
-        super().__init__(code, desc, priority, level)
-        
+    def __init__(self, days:list, weekHours:int, code, desc, priority, level, levelNum):
+        super().__init__(code, desc, priority, level, levelNum)
+
 
 class MonthlyJob(Job):
-    def __init__(self, hoursNeeded, dayNeeded, complete, code, desc, priority, level):
-        super().__init__(code, desc, priority, level)
+    def __init__(self, hoursNeeded:int, dayNeeded:str, complete:bool, code, desc, priority, level, levelNum):
+        super().__init__(code, desc, priority, level, levelNum)
         
         
 class Reception(DailyJob):
-    def __init__(self,desk,dayHours,code,desc,priority,level):
+    def __init__(self,desk:int,dayHours,code,desc,priority,level,levelNum):
         self.__desk = desk
-        super().__init__(dayHours,code,desc,priority,level)
+        super().__init__(dayHours,code,desc,priority,level,levelNum)
 
 
 
