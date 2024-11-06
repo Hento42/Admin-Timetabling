@@ -118,12 +118,7 @@ class Staff(object):
                 return 0
         else:
             return 0
-    
-
-class FullHours(Staff):
-    def __init__(self, id, fName, sName, level, email, hours, attendance):
-        super().__init__(id, fName, sName, level, email, hours, attendance)
-
+        
     def changeHours(self, dayInt, newStartTime, newEndTime):
         valid = []
         if not str(dayInt).isdigit():
@@ -146,22 +141,60 @@ class FullHours(Staff):
         else:
             return 0
 
+    
+
+class FullHours(Staff):
+    def __init__(self, id, fName, sName, level, email, hours, attendance):
+        self.__type = "Full"
+        super().__init__(id, fName, sName, level, email, hours, attendance)
+
         
         
 class SplitHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, splitStart:dict, splitEnd:dict):
         self.__splitHoursStart = splitStart
         self.__splitHoursEnd = splitEnd
+        self.__type = "Split"
         super().__init__(id, fName, sName, level, email, hours, attendance)
+
+    def moveSplitHour(self, dayInt, newStart, newEnd):
+        try:
+            dayInt = int(dayInt)
+            valid = re.findall("[0-1][0-9]:[0-5][0-9]:[0-5][0-9]",newStart+","+newEnd)
+        except Exception:
+            return 0
+        else:
+            if len(valid) == 2 and dayInt >= 0 and dayInt <= 4:
+                self.__splitHoursStart[dayInt] = newStart
+                self.__splitHoursEnd[dayInt] = newEnd
+                return 1
+            else:
+                return 0
+
         
         
 class ZeroHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, startTime, endTime):
         self.__startTime = startTime
         self.__endTime = endTime
+        self.__type = "Zero"
         super().__init__(id, fName, sName, level, email, hours, attendance)
-    
 
+    def changeZeroHoursTimes(self, dayInt, newStart, newEnd):
+        try:
+            dayInt = int(dayInt)
+            valid = re.findall("[0-1][0-9]:[0-5][0-9]:[0-5][0-9]",newStart+","+newEnd)
+        except Exception:
+            return 0
+        else:
+            if len(valid) == 2 and dayInt >= 0 and dayInt <= 4:
+                self.__splitHoursStart[dayInt] = newStart
+                self.__splitHoursEnd[dayInt] = newEnd
+                return 1
+            else:
+                return 0
+
+    
 class Job(object):
     def __init__(self,code,desc,priority,level):
         self.__jobCode = code
