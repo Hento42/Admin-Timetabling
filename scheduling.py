@@ -260,11 +260,19 @@ class DailyJob(Job):
 
 class WeeklyJob(Job):
     def __init__(self, days:list, weekHours:int, code, desc, priority, level, levelNum):
+        self.__days = days
+        self.__weekHours = weekHours
         super().__init__(code, desc, priority, level, levelNum)
 
+    def getDays(self):
+        return self._jobCode, self.__days
+        
 
 class MonthlyJob(Job):
     def __init__(self, hoursNeeded:int, dayNeeded:str, complete:bool, code, desc, priority, level, levelNum):
+        self.__hours = hoursNeeded
+        self.__days = dayNeeded
+        self.__done = complete
         super().__init__(code, desc, priority, level, levelNum)
         
         
