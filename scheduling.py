@@ -51,6 +51,8 @@ class Queue(object):
 # Creating the classes for Staff and Jobs, and using inheritance to produce the different types of each
 # In the "setter" methods, I have used a system to return 1 if successful, and 0 if not. 
 # This will allow the code to navigate any potential errors encountered in the execution of the method.
+
+# Parent class for the staff, with most attributes and methods defined
 class Staff(object):
     def __init__(self, id:int, fName:str, sName:str, level:dict, email:str, hours:list, attendance:dict):
         self.__staffID = id
@@ -146,14 +148,15 @@ class Staff(object):
             return 0
     
     
-
+# Subclass for staff on a full hours contract. Doesn't contain any methods, and only has one separate attribute which is defined
 class FullHours(Staff):
     def __init__(self, id:int, fName:str, sName:str, level:dict, email:str, hours:list, attendance:dict):
         self.__type = "Full"
         super().__init__(id, fName, sName, level, email, hours, attendance)
 
         
-        
+# Subclass for a split hours contract, with two extra attributes for storing any splitHours that the staff have, and a method to 
+# change the split hours for the staff
 class SplitHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, splitStart:dict, splitEnd:dict):
         self.__splitHoursStart = splitStart
@@ -176,7 +179,8 @@ class SplitHours(Staff):
                 return 0
 
         
-        
+# Subclass for zero hour contracts, with two extra attributes for the start and end of the times that they are "available" for use 
+# on the zero hour contract, with a method to change it which utilises validation for the hours entered
 class ZeroHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, startTime:list, endTime:list):
         self.__startTime = startTime
@@ -256,6 +260,9 @@ class DailyJob(Job):
     def changeDailyHours(self,newhours):
         if str(newhours).isdecimal() and newhours >= 0 and newhours <= 10.5:
             self.__hoursPerDay = newhours
+            return 1
+        else:
+            return 0
 
 
 class WeeklyJob(Job):
@@ -266,7 +273,36 @@ class WeeklyJob(Job):
 
     def getDays(self):
         return self._jobCode, self.__days
-        
+
+    def getHours(self):
+        return self._jobCode, self.__weekHours
+
+    def changeDays(self,newDays):
+        valid = False
+        try:
+            if len(newDays) == 5:
+                for day in newDays:
+                    if day >= 0 or day <= 4:
+                        valid = True
+                    else:
+                        return False
+        except Exception:
+            return 0
+        else:
+            if valid:
+                self.__days = newDays
+                return 1
+
+    def changeHours(self, newHours):
+        if str(newHours).isdecimal():
+            if newHours >= 0 and newHours <= 10.5:
+                self.__weekHours = newHours
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
 
 class MonthlyJob(Job):
     def __init__(self, hoursNeeded:int, dayNeeded:str, complete:bool, code, desc, priority, level, levelNum):
