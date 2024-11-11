@@ -4,6 +4,7 @@ con = sqlite3.connect("databases.db") # Connecting to the database
 editor = con.cursor()   # Linking to the database
 
 
+
 # Creates a stack data structure to store the jobs in a LIFO priority order
 class Stack(object):
     def __init__(self,items):
@@ -51,6 +52,8 @@ class Queue(object):
 # Creating the classes for Staff and Jobs, and using inheritance to produce the different types of each
 # In the "setter" methods, I have used a system to return 1 if successful, and 0 if not. 
 # This will allow the code to navigate any potential errors encountered in the execution of the method.
+# For the instantiation of the classes, for any newly defined inputs I have included the data type.
+# This allows me to easily see the data types of each variable to save time when utilising them later in the program.
 
 # Parent class for the staff, with most attributes and methods defined
 class Staff(object):
@@ -81,6 +84,7 @@ class Staff(object):
     
     def getType(self):
         return self.__staffID, self.__type
+
     
     def linkToJob(self):
         return self.__staffID, self.__firstName, self.__level
@@ -202,14 +206,18 @@ class ZeroHours(Staff):
             else:
                 return 0
 
-    
+
+# Parent class for the job, with most attributes and methods defined    
+# A large amount of defensive programming was used to reduce the risk of a severe error.
 class Job(object):
-    def __init__(self,code:int,desc:str,priority:int,level:int,levelNum:int):
-        self._jobCode = code
+    def __init__(self,code:int,desc:str,priority:int,level:int,levelNum:int,hourType:int,daysNeeded:str):
+        self._jobCode = code        
+        self._hourType = hourType
         self.__description = desc
         self.__priority = priority
         self.__level = level
         self.__levelNum = levelNum
+        self.__days = daysNeeded
 
     def getLevel(self):
         return self._jobCode, self.__level, self.__levelNum
@@ -219,6 +227,9 @@ class Job(object):
 
     def getDescription(self):
         return self._jobCode, self.__description
+
+    def getDays(self):
+        return self._jobCode, self.__days
 
     def changePriority(self, newPriority):
         try:
@@ -249,13 +260,34 @@ class Job(object):
                 return 0  
 
 
+    def changeHourType(self,newType):
+        if type(newType) == int:
+            if newType >= 0 and newType <= 3:
+                self._hourType = newType
+                return 1
+            else:
+                return 0
+        else:
+            return 0 
+
+    def changeDays(self,newDays):
+        # List of the codes used for the days for each job, they are self all explantory, except TDB - Two Days Before (the end of the month)
+        DAYLIST = ["ALL", "ANY", "SOME", "TDB", "MO", "TU", "WE", "TH", "FR"]
+        if newDays in DAYLIST:
+            self.__days = newDays
+            return 1
+        else:
+            return 0
+
+# Subclass for the jobs which are needed daily. This includes a new attribute of hoursPerDay, which refers to the number of
+# hours needed every day. 
 class DailyJob(Job):
     def __init__(self,dayHours:int,code,desc,priority,level,levelNum):
         self.__hoursPerDay = dayHours
         super().__init__(code,desc,priority,level,levelNum)
 
     def getHours(self):
-        return self._jobCode, self.__hoursPerDay
+        return self._jobCode, self.__hoursPerDay, self._hourType
         
     def changeDailyHours(self,newhours):
         if str(newhours).isdecimal() and newhours >= 0 and newhours <= 10.5:
@@ -265,37 +297,20 @@ class DailyJob(Job):
             return 0
 
 
+# Subclass for the weekly jobs, including the number of hours needed in the week
+# Validation is in use to ensure the number of hours entered doesn't exceed the maximum possible
 class WeeklyJob(Job):
-    def __init__(self, days:list, weekHours:int, code, desc, priority, level, levelNum):
-        self.__days = days
+    def __init__(self, weekHours:int, code, desc, priority, level, levelNum):
         self.__weekHours = weekHours
         super().__init__(code, desc, priority, level, levelNum)
 
-    def getDays(self):
-        return self._jobCode, self.__days
-
     def getHours(self):
-        return self._jobCode, self.__weekHours
+        return self._jobCode, self.__weekHours, self.__hourType
 
-    def changeDays(self,newDays):
-        valid = False
-        try:
-            if len(newDays) == 5:
-                for day in newDays:
-                    if day >= 0 or day <= 4:
-                        valid = True
-                    else:
-                        return False
-        except Exception:
-            return 0
-        else:
-            if valid:
-                self.__days = newDays
-                return 1
 
     def changeHours(self, newHours):
         if str(newHours).isdecimal():
-            if newHours >= 0 and newHours <= 10.5:
+            if newHours >= 0 and newHours <= 52.5:
                 self.__weekHours = newHours
                 return 1
             else:
@@ -304,18 +319,58 @@ class WeeklyJob(Job):
             return 0
 
 
+# Subclass for the small number of jobs thast are monthly. This includes the hours needed, similarly to the 
+# previous subclasses, but also whether the job is complete for the month, so it isn't rescheduled if so
 class MonthlyJob(Job):
-    def __init__(self, hoursNeeded:int, dayNeeded:str, complete:bool, code, desc, priority, level, levelNum):
+    def __init__(self, hoursNeeded:int, complete:bool, code, desc, priority, level, levelNum):
         self.__hours = hoursNeeded
-        self.__days = dayNeeded
         self.__done = complete
         super().__init__(code, desc, priority, level, levelNum)
-        
-        
+
+    def getHours(self):
+        return self._jobCode, self.__hours, self._hourType
+
+    def getValid(self):
+        return self._jobCode, self.__done
+
+
+    def changeHours(self, newHours):
+        if str(newHours).isdecimal():
+            if newHours >= 0:
+                self.__hours = newHours
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
+    def changeStatus(self):
+        if self.__done:
+            self.__done = False
+        else:
+            self.__done = True
+        return 1
+
+
+# Subclass specifically for reception, since it requires the extra attribute of the desk number. This is an inhertance chain
+# of 3, which is the largest chain that should be used, so it won't go any further.
 class Reception(DailyJob):
     def __init__(self,desk:int,dayHours,code,desc,priority,level,levelNum):
         self.__desk = desk
         super().__init__(dayHours,code,desc,priority,level,levelNum)
+    
+    def getDesk(self):
+        return self._jobCode, self.__desk
+
+    def changeDesk(self, newDesk):
+        if type(newDesk) == int:
+            if newDesk >= 1 and newDesk <= 4:
+                self.__desk = newDesk
+                return 1
+            else:
+                return 0
+        else:
+            return 0 
 
 
 
