@@ -82,7 +82,7 @@ class Staff(object):
         return self.__staffID, self.__attendance
     
     def getType(self):
-        return self.__staffID, self.__type
+        return self.__staffID, self._type
 
     
     def linkToJob(self):
@@ -166,19 +166,19 @@ Contract type: {self._type}
     
 # Subclass for staff on a full hours contract. Doesn't contain any methods, and only has one separate attribute which is defined
 class FullHours(Staff):
-    def __init__(self, id:int, fName:str, sName:str, level:dict, email:str, hours:list, attendance:dict):
-        self._type = "Full"
+    def __init__(self, id, fName, sName, level, email, hours, attendance):
         super().__init__(id, fName, sName, level, email, hours, attendance)
+        self._type = "Full"
 
         
 # Subclass for a split hours contract, with two extra attributes for storing any splitHours that the staff have, and a method to 
 # change the split hours for the staff
 class SplitHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, splitStart:dict, splitEnd:dict):
+        super().__init__(id, fName, sName, level, email, hours, attendance)
         self.__splitHoursStart = splitStart
         self.__splitHoursEnd = splitEnd
         self._type = "Split"
-        super().__init__(id, fName, sName, level, email, hours, attendance)
 
     def moveSplitHour(self, dayInt, newStart, newEnd):
         try:
@@ -199,10 +199,10 @@ class SplitHours(Staff):
 # on the zero hour contract, with a method to change it which utilises validation for the hours entered
 class ZeroHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, startTime:list, endTime:list):
+        super().__init__(id, fName, sName, level, email, hours, attendance)
         self.__startTime = startTime
         self.__endTime = endTime
         self._type = "Zero"
-        super().__init__(id, fName, sName, level, email, hours, attendance)
 
     def changeZeroHoursTimes(self, dayInt, newStart, newEnd):
         try:
@@ -423,15 +423,36 @@ def linkStaff():
     staffList = editor.execute("""SELECT *
                          FROM StaffDetails
                          ORDER BY StaffCode ASC""")
-    
-    staff = []
 
+    staff = []
     for record in staffList.fetchall():
         hourList = []
         for i in range(9,19):
             hourList.append(record[i])
-        staff.append(Staff(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+
+        if record[19] == 0:
+            staff.append(FullHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
                            record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False}))
+        elif record[19] == 1:
+            splitStart = {}
+            splitEnd = {}
+            splitTimes = editor.execute(f"""SELECT Day, StartTime, EndTime
+                                        FROM SplitHours
+                                        WHERE SplitHours.StaffCode = {record[0]}""")
+            staff.append(SplitHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},splitStart,splitEnd))
+        elif record[19] == 2:
+            zeroStart = ["","","","",""]
+            zeroEnds = ["","","","",""]
+            zeroTimes = editor.execute(f"""SELECT Day, StartTime, EndTime
+                                        FROM ZeroHours
+                                        WHERE ZeroHours.StaffCode = {record[0]}""")
+            for item in zeroTimes.fetchall():
+                zeroStart[item[0]-1] = item[1]
+                zeroEnds[item[0]-1] = item[2]
+            staff.append(ZeroHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},zeroStart,zeroEnds))
+
 
     
     return staff
@@ -462,6 +483,3 @@ def schedule(pJobs, pStaff, pHours, day):
     
     
 con.commit() # Commits all the changes from the program
-
-theStaff = linkStaff()
-theStaff[0].displayDetails()
