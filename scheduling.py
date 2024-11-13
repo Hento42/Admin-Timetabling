@@ -1,8 +1,7 @@
 import sqlite3, re
+
 con = sqlite3.connect("databases.db") # Connecting to the database
-
 editor = con.cursor()   # Linking to the database
-
 
 
 # Creates a stack data structure to store the jobs in a LIFO priority order
@@ -65,7 +64,7 @@ class Staff(object):
         self.__email = email
         self._hoursWorked = hours
         self.__attendance = attendance
-        self.__type = ""
+        self._type = ""
 
     def getName(self):
         return self.__staffID, self.__firstName, self.__surname
@@ -150,12 +149,25 @@ class Staff(object):
                 self._hoursWorked[dayInt] = [newStartTime, newEndTime]
         else:
             return 0
+        
+
+    def displayDetails(self):
+        print(f"""
+ID: {self.__staffID}
+First Name: {self.__firstName}
+Surname: {self.__surname}
+Email: {self.__email}
+Levels: {self.__level}
+Hours: {self._hoursWorked}
+Attendance: {self.__attendance}
+Contract type: {self._type}
+""")
     
     
 # Subclass for staff on a full hours contract. Doesn't contain any methods, and only has one separate attribute which is defined
 class FullHours(Staff):
     def __init__(self, id:int, fName:str, sName:str, level:dict, email:str, hours:list, attendance:dict):
-        self.__type = "Full"
+        self._type = "Full"
         super().__init__(id, fName, sName, level, email, hours, attendance)
 
         
@@ -165,7 +177,7 @@ class SplitHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, splitStart:dict, splitEnd:dict):
         self.__splitHoursStart = splitStart
         self.__splitHoursEnd = splitEnd
-        self.__type = "Split"
+        self._type = "Split"
         super().__init__(id, fName, sName, level, email, hours, attendance)
 
     def moveSplitHour(self, dayInt, newStart, newEnd):
@@ -189,7 +201,7 @@ class ZeroHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, startTime:list, endTime:list):
         self.__startTime = startTime
         self.__endTime = endTime
-        self.__type = "Zero"
+        self._type = "Zero"
         super().__init__(id, fName, sName, level, email, hours, attendance)
 
     def changeZeroHoursTimes(self, dayInt, newStart, newEnd):
@@ -305,7 +317,7 @@ class WeeklyJob(Job):
         super().__init__(code, desc, priority, level, levelNum)
 
     def getHours(self):
-        return self._jobCode, self.__weekHours, self.__hourType
+        return self._jobCode, self.__weekHours, self._hourType
 
 
     def changeHours(self, newHours):
@@ -401,6 +413,28 @@ def mergeSort(numList):
         while b < len(rightList):
             numList[c] = rightList[b]
             b += 1; c += 1
+
+
+
+
+# Subprogram to connect the data in the database tables to the classes instantiated above
+def linkStaff():
+
+    staffList = editor.execute("""SELECT *
+                         FROM StaffDetails
+                         ORDER BY StaffCode ASC""")
+    
+    staff = []
+
+    for record in staffList.fetchall():
+        hourList = []
+        for i in range(9,19):
+            hourList.append(record[i])
+        staff.append(Staff(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False}))
+
+    
+    return staff
     
 
 
@@ -428,3 +462,6 @@ def schedule(pJobs, pStaff, pHours, day):
     
     
 con.commit() # Commits all the changes from the program
+
+theStaff = linkStaff()
+theStaff[0].displayDetails()
