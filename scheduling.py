@@ -160,8 +160,14 @@ Email: {self.__email}
 Levels: {self.__level}
 Hours: {self._hoursWorked}
 Attendance: {self.__attendance}
-Contract type: {self._type}
-""")
+Contract type: {self._type}""")
+        if self._type == "Split":
+            print(f"Split hours start times: {self._splitHoursStart}")
+            print(f"Split hours end times: {self._splitHoursEnd}")
+        elif self._type == "Zero":
+            print(f"Zero hours start times: {self._startTime}")
+            print(f"Zero hours end time: {self._endTime}")
+        print()
     
     
 # Subclass for staff on a full hours contract. Doesn't contain any methods, and only has one separate attribute which is defined
@@ -176,8 +182,8 @@ class FullHours(Staff):
 class SplitHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, splitStart:dict, splitEnd:dict):
         super().__init__(id, fName, sName, level, email, hours, attendance)
-        self.__splitHoursStart = splitStart
-        self.__splitHoursEnd = splitEnd
+        self._splitHoursStart = splitStart
+        self._splitHoursEnd = splitEnd
         self._type = "Split"
 
     def moveSplitHour(self, dayInt, newStart, newEnd):
@@ -188,8 +194,8 @@ class SplitHours(Staff):
             return 0
         else:
             if len(valid) == 2 and dayInt >= 0 and dayInt <= 4:
-                self.__splitHoursStart[dayInt] = newStart
-                self.__splitHoursEnd[dayInt] = newEnd
+                self._splitHoursStart[dayInt] = newStart
+                self._splitHoursEnd[dayInt] = newEnd
                 return 1
             else:
                 return 0
@@ -200,8 +206,8 @@ class SplitHours(Staff):
 class ZeroHours(Staff):
     def __init__(self, id, fName, sName, level, email, hours, attendance, startTime:list, endTime:list):
         super().__init__(id, fName, sName, level, email, hours, attendance)
-        self.__startTime = startTime
-        self.__endTime = endTime
+        self._startTime = startTime
+        self._endTime = endTime
         self._type = "Zero"
 
     def changeZeroHoursTimes(self, dayInt, newStart, newEnd):
@@ -212,8 +218,8 @@ class ZeroHours(Staff):
             return 0
         else:
             if len(valid) == 2 and dayInt >= 0 and dayInt <= 4:
-                self.__splitHoursStart[dayInt] = newStart
-                self.__splitHoursEnd[dayInt] = newEnd
+                self._startTime[dayInt] = newStart
+                self._endTime[dayInt] = newEnd
                 return 1
             else:
                 return 0
@@ -439,6 +445,9 @@ def linkStaff():
             splitTimes = editor.execute(f"""SELECT Day, StartTime, EndTime
                                         FROM SplitHours
                                         WHERE SplitHours.StaffCode = {record[0]}""")
+            for day in splitTimes:
+                splitStart[day[0]] = day[1]
+                splitEnd[day[0]] = day[2]
             staff.append(SplitHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
                            record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},splitStart,splitEnd))
         elif record[19] == 2:
@@ -453,8 +462,6 @@ def linkStaff():
             staff.append(ZeroHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
                            record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},zeroStart,zeroEnds))
 
-
-    
     return staff
     
 
@@ -483,3 +490,7 @@ def schedule(pJobs, pStaff, pHours, day):
     
     
 con.commit() # Commits all the changes from the program
+test = linkStaff()
+test[2].displayDetails()
+for staffMem in test:
+    staffMem.displayDetails()
