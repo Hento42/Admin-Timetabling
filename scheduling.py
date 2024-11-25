@@ -465,6 +465,8 @@ def linkJob():
             elif record[2] == "M":
                 jobs.append(MonthlyJob(record[3],False,record[0],record[1],record[6],record[7],record[4],record[5]))
 
+    return jobs
+
 
 # Subprogram for the scheduling part of the program, so it can be imported into and called by main.py
 def schedule(pJobs, pStaff, pHours, day):
