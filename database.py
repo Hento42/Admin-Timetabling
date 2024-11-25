@@ -33,7 +33,8 @@ editor.execute("CREATE TABLE Jobs ("
                "HoursNeeded INTEGER,"
                "HourType INTEGER,"
                "DaysNeeded TEXT,"
-               "Priority INTEGER)")
+               "Priority INTEGER,"
+               "LevelNum INTEGER)")
 
 
 editor.execute("CREATE TABLE Week ("
@@ -128,24 +129,24 @@ editor.execute("""INSERT INTO ZeroHours VALUES
 
 
 editor.execute("""INSERT INTO Jobs VALUES
-               (0, "Reception 1", "D", 10.5, 1, "ALL", 1),
-               (1, "Reception 2", "D", 10.5, 0, "ALL", 0),
-               (2, "Reception 3", "D", 10.5, 2, "ALL", 4),
-               (3, "Reception 4", "D", 10.5, 3, "SOME", 5),
-               (4, "Dispensary", "D", 10.5, 0, "ALL", 0),
-               (5, "Dispensary Help", "D", 10.5, 2, "SOME", 4),
-               (6, "Hurley 1", "D", 10.5, 0, "ALL", 0),
-               (7, "Hurley 2", "D", 10.5, 1, "ALL", 1),
-               (8, "Hurley 3", "W", 10.5, 2, "ANY", 5),
-               (9, "Admin 1", "D", 10.5, 1, "ALL", 1),
-               (10, "Admin 2", "D", 10.5, 1, "ALL", 3),
-               (11, "Extra Admin 1", "D", 10.5, 3, "ALL", 6),
-               (12, "Extra Admin 2", "D", 10.5, 3, "ALL", 6),
-               (13, "Non-Workflow Scanning", "W", 2, 0, "ANY", 4),
-               (14, "Workflow Scanning", "D", 4, 0, "ALL", 1),
-               (15, "Weekly Scripts", "W", 4, 1, "FR", 2),
-               (16, "Monthly Scripts", "M", 2, 1, "TDB", 2),
-               (17, "New Registrations", "W", 3, 2, "ANY", 2)""")
+               (0, "Reception 1", "D", 10.5, 1, "ALL", 1, -1),
+               (1, "Reception 2", "D", 10.5, 0, "ALL", 0, -1),
+               (2, "Reception 3", "D", 10.5, 2, "ALL", 4, 0),
+               (3, "Reception 4", "D", 10.5, 3, "SOME", 5, -1),
+               (4, "Dispensary", "D", 10.5, 0, "ALL", 0, 0),
+               (5, "Dispensary Help", "D", 10.5, 2, "SOME", 4, 0),
+               (6, "Hurley 1", "D", 10.5, 0, "ALL", 0, 1),
+               (7, "Hurley 2", "D", 10.5, 1, "ALL", 1, 1),
+               (8, "Hurley 3", "W", 10.5, 2, "ANY", 5, 1),
+               (9, "Admin 1", "D", 10.5, 1, "ALL", 1, 3),
+               (10, "Admin 2", "D", 10.5, 1, "ALL", 3, 3),
+               (11, "Extra Admin 1", "D", 10.5, 3, "ALL", 6, -1),
+               (12, "Extra Admin 2", "D", 10.5, 3, "ALL", 6, -1),
+               (13, "Non-Workflow Scanning", "W", 2, 0, "ANY", 4, -1),
+               (14, "Workflow Scanning", "D", 4, 0, "ALL", 1, 4),
+               (15, "Weekly Scripts", "W", 4, 1, "FR", 2, 2),
+               (16, "Monthly Scripts", "M", 2, 1, "TDB", 2, 2),
+               (17, "New Registrations", "W", 3, 2, "ANY", 2, -1)""")
 
 
 con.commit()
