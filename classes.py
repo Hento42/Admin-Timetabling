@@ -460,7 +460,7 @@ def linkJob():
     
     maxpriority = priorities.fetchall()[-1][0]
 
-    for priority in range(0,maxpriority+1):
+    for priority in range(maxpriority+1,0,-1):
         jobQueue = Queue([])
         jobList = editor.execute(f"""SELECT *
                                 FROM Jobs
@@ -492,3 +492,4 @@ for staffMem in test:
     staffMem.displayDetails()
 test2 = linkJob()
 print(test2)
+print(test2.pop().deQueue().getPriority())
