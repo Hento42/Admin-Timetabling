@@ -415,15 +415,15 @@ def linkStaff():
                          FROM StaffDetails
                          ORDER BY StaffCode ASC""")
 
-    staff = []
+    staff = {}
     for record in staffList.fetchall():
         hourList = []
         for i in range(9,19):
             hourList.append(record[i])
 
         if record[19] == 0:
-            staff.append(FullHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
-                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False}))
+            staff[record[0]] = FullHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False})
         elif record[19] == 1:
             splitStart = {}
             splitEnd = {}
@@ -433,8 +433,8 @@ def linkStaff():
             for day in splitTimes:
                 splitStart[day[0]] = day[1]
                 splitEnd[day[0]] = day[2]
-            staff.append(SplitHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
-                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},splitStart,splitEnd))
+            staff[record[0]] = SplitHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},splitStart,splitEnd)
         elif record[19] == 2:
             zeroStart = ["","","","",""]
             zeroEnds = ["","","","",""]
@@ -444,8 +444,8 @@ def linkStaff():
             for item in zeroTimes.fetchall():
                 zeroStart[item[0]-1] = item[1]
                 zeroEnds[item[0]-1] = item[2]
-            staff.append(ZeroHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
-                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},zeroStart,zeroEnds))
+            staff[record[0]] = ZeroHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
+                           record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},zeroStart,zeroEnds)
 
     return staff
     
@@ -488,8 +488,7 @@ def linkJob():
 con.commit() # Commits all the changes from the program
 test = linkStaff()
 test[2].displayDetails()
-for staffMem in test:
-    staffMem.displayDetails()
+test[0].displayDetails()
 test2 = linkJob()
 print(test2)
 print(test2.pop().deQueue().getPriority())
