@@ -15,14 +15,16 @@ class Stack(object):
         self.__items.append(item)
 
     def isEmpty(self):
-        return self.__top == 0
+        return self.__top == -1
   
     def pop(self):
-        item = self.__items[self.__top]
-        self.__items = self.__items[:self.__top]
-        self.__top -= 1
-        print(item)
-        return item
+        if not self.isEmpty():
+            item = self.__items[self.__top]
+            self.__items = self.__items[:self.__top]
+            self.__top -= 1
+            return item
+        else:
+            return -1
 
 
 # Creates a queue data structure to store the jobs in a FIFO priority order    
@@ -449,23 +451,37 @@ def linkStaff():
     
 
 def linkJob():
+    
+    jobs = Stack([])
+    
+    priorities = editor.execute("""SELECT Priority
+                                FROM JOBS
+                                ORDER BY PRIORITY ASC""")
+    
+    maxpriority = priorities.fetchall()[-1][0]
 
-    jobList = editor.execute("""SELECT *
-                             FROM Jobs
-                             ORDER BY JobCode ASC""")
-    jobs = []
-    for record in jobList.fetchall():
-            if record[2] == "D":
-                if "Reception" in record[1]:
-                    jobs.append(Reception(int(record[1][-1]),record[3],record[0],record[1],record[6],record[7],record[4],record[5]))
+    for priority in range(0,maxpriority+1):
+        jobQueue = Queue([])
+        jobList = editor.execute(f"""SELECT *
+                                FROM Jobs
+                                WHERE Priority = {priority}
+                                ORDER BY JobCode ASC""")
+        for theJob in jobList.fetchall():
+            if theJob[2] == "D":
+                if "Reception" in theJob[1]:
+                    jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
                 else:
-                    jobs.append(DailyJob(record[3],record[0],record[1],record[6],record[7],record[4],record[5]))
-            elif record[2] == "W":
-                jobs.append(WeeklyJob(record[3],record[0],record[1],record[6],record[7],record[4],record[5]))
-            elif record[2] == "M":
-                jobs.append(MonthlyJob(record[3],False,record[0],record[1],record[6],record[7],record[4],record[5]))
+                    jobQueue.enQueue(DailyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+            elif theJob[2] == "W":
+                jobQueue.enQueue(WeeklyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+            elif theJob[2] == "M":
+                jobQueue.enQueue(MonthlyJob(theJob[3],False,theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+
+        jobs.push(jobQueue)
+    
 
     return jobs
+
 
     
     
