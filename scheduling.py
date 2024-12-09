@@ -8,3 +8,5 @@ editor = con.cursor()   # Linking to the database
 jobStack, maxPriority = linkJob()
 staffDict = linkStaff()
 
+while not jobStack.isEmpty():
+    jobQueue = jobStack.pop()
