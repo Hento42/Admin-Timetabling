@@ -428,8 +428,9 @@ def linkStaff():
             splitStart = {}
             splitEnd = {}
             splitTimes = editor.execute(f"""SELECT Day, StartTime, EndTime
-                                        FROM SplitHours
-                                        WHERE SplitHours.StaffCode = {record[0]}""")
+                                        FROM ExtraHours
+                                        WHERE ExtraHours.StaffCode = {record[0]}
+                                        AND ExtraHours.Type = 'Split'""")
             for day in splitTimes:
                 splitStart[day[0]] = day[1]
                 splitEnd[day[0]] = day[2]
@@ -439,8 +440,9 @@ def linkStaff():
             zeroStart = ["","","","",""]
             zeroEnds = ["","","","",""]
             zeroTimes = editor.execute(f"""SELECT Day, StartTime, EndTime
-                                        FROM ZeroHours
-                                        WHERE ZeroHours.StaffCode = {record[0]}""")
+                                        FROM ExtraHours
+                                        WHERE ExtraHours.StaffCode = {record[0]}
+                                        AND ExtraHours.Type = 'Zero'""")
             for item in zeroTimes.fetchall():
                 zeroStart[item[0]-1] = item[1]
                 zeroEnds[item[0]-1] = item[2]
