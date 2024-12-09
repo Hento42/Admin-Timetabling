@@ -486,9 +486,3 @@ def linkJob():
     
     
 con.commit() # Commits all the changes from the program
-test = linkStaff()
-test[2].displayDetails()
-test[0].displayDetails()
-test2 = linkJob()
-print(test2)
-print(test2.pop().deQueue().getPriority())
