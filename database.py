@@ -76,20 +76,14 @@ editor.execute("CREATE TABLE HoursRecord ("
                "Other INTEGER)")
 
 
-editor.execute("CREATE TABLE SplitHours ("
+editor.execute("CREATE TABLE ExtraHours ("
                "StaffCode INTEGER,"
                "Day INTEGER,"
+               "Type TEXT,"
                "StartTime Time,"
                "EndTime Time,"
                "PRIMARY KEY(StaffCode, Day))")
 
-
-editor.execute("CREATE TABLE ZeroHours ("
-               "StaffCode INTEGER,"
-               "Day INTEGER,"
-               "StartTime Time,"
-               "EndTime Time,"
-               "PRIMARY KEY(StaffCode, Day))")
 
 
 editor.execute("""INSERT INTO StaffDetails VALUES
@@ -110,22 +104,19 @@ editor.execute("""INSERT INTO StaffDetails VALUES
                (14, "Bill", "Crouse", 0, 0, 0, 0, 0, "emailplaceholder", "00:00:00", "00:00:00", "08:00:00", "18:30:00", "08:00:00", "18:30:00", "00:00:00", "00:00:00", "08:00:00", "18:30:00", 2)""")
 
 
-editor.execute("""INSERT INTO SplitHours VALUES
-               (2, 3, '12:00:00', '13:00:00'),
-               (2, 4, '12:00:00', '13:00:00'),
-               (3, 2, '12:00:00', '13:30:00'),
-               (3, 4, '12:00:00', '13:30:00'),
-               (3, 5, '12:00:00', '13:30:00'),
-               (8, 1, '12:00:00', '14:30:00'),
-               (8, 3, '12:00:00', '13:00:00'),
-               (8, 4, '12:00:00', '13:00:00'),
-               (8, 5, '12:00:00', '14:30:00')""")
-
-
-editor.execute("""INSERT INTO ZeroHours VALUES
-               (14, 2, "08:00:00", "18:30:00"),
-               (14, 3, "08:00:00", "18:30:00"),
-               (14, 5, "08:00:00", "18:30:00")""")
+editor.execute("""INSERT INTO ExtraHours VALUES
+               (2, 3, 'Split', '12:00:00', '13:00:00'),
+               (2, 4, 'Split', '12:00:00', '13:00:00'),
+               (3, 2, 'Split', '12:00:00', '13:30:00'),
+               (3, 4, 'Split', '12:00:00', '13:30:00'),
+               (3, 5, 'Split', '12:00:00', '13:30:00'),
+               (8, 1, 'Split', '12:00:00', '14:30:00'),
+               (8, 3, 'Split', '12:00:00', '13:00:00'),
+               (8, 4, 'Split', '12:00:00', '13:00:00'),
+               (8, 5, 'Split', '12:00:00', '14:30:00'),
+               (14, 2, 'Zero', "08:00:00", "18:30:00"),
+               (14, 3, 'Zero', "08:00:00", "18:30:00"),
+               (14, 5, 'Zero', "08:00:00", "18:30:00")""")
 
 
 editor.execute("""INSERT INTO Jobs VALUES
