@@ -480,9 +480,7 @@ def linkJob():
         jobs.push(jobQueue)
     
 
-    return jobs
+    return jobs, maxpriority
 
 
-    
-    
-con.commit() # Commits all the changes from the program
+con.commit() # Commits all the changes from the program to the database
