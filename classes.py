@@ -462,7 +462,7 @@ def linkJob():
     
     maxpriority = priorities.fetchall()[-1][0]
 
-    for priority in range(maxpriority+1,0,-1):
+    for priority in range(maxpriority,-1,-1):
         jobQueue = Queue([])
         jobList = editor.execute(f"""SELECT *
                                 FROM Jobs
