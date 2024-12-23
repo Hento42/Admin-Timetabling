@@ -416,10 +416,18 @@ def linkStaff():
                          ORDER BY StaffCode ASC""")
 
     staff = {}
+    levelNums = [["DIS",0,0,0],["HUR",0],["SCR",0,0,0],["ADM",0,0,0],["WSC",0,0]]
+    
     for record in staffList.fetchall():
         hourList = []
         for i in range(9,19):
             hourList.append(record[i])
+                
+        count = -1       # Code to collect the number of potential staff for each job
+        for ind in range(3,8):
+            count += 1
+            if record[ind] > 0:
+                levelNums[count][record[ind]] += 1
 
         if record[19] == 0:
             staff[record[0]] = FullHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
@@ -449,40 +457,8 @@ def linkStaff():
             staff[record[0]] = ZeroHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
                            record[8],hourList,{"MO":False,"TU":False,"WE":False,"TH":False,"FR":False},zeroStart,zeroEnds)
 
-    return staff
+    return staff, levelNums
     
-
-def linkJob():
-    
-    jobs = Stack([])
-    
-    priorities = editor.execute("""SELECT Priority
-                                FROM JOBS
-                                ORDER BY PRIORITY ASC""")
-    
-    maxpriority = priorities.fetchall()[-1][0]
-
-    for priority in range(maxpriority,-1,-1):
-        jobQueue = Queue([])
-        jobList = editor.execute(f"""SELECT *
-                                FROM Jobs
-                                WHERE Priority = {priority}
-                                ORDER BY JobCode ASC""")
-        for theJob in jobList.fetchall():
-            if theJob[2] == "D":
-                if "Reception" in theJob[1]:
-                    jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
-                else:
-                    jobQueue.enQueue(DailyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
-            elif theJob[2] == "W":
-                jobQueue.enQueue(WeeklyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
-            elif theJob[2] == "M":
-                jobQueue.enQueue(MonthlyJob(theJob[3],False,theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
-
-        jobs.push(jobQueue)
-    
-
-    return jobs, maxpriority
 
 
 con.commit() # Commits all the changes from the program to the database
