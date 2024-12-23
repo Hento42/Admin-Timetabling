@@ -5,8 +5,9 @@ import sqlite3, datetime as D, calendar as C
 con = sqlite3.connect("databases.db") # Connecting to the database
 editor = con.cursor()   # Linking to the database
 
+staffDict, levelNums = linkStaff()
 
-def linkJob():
+def linkJob(pLevels):
     
     jobs = Stack([])
     
@@ -21,8 +22,10 @@ def linkJob():
         jobList = editor.execute(f"""SELECT *
                                 FROM Jobs
                                 WHERE Priority = {priority}
-                                ORDER BY JobCode ASC""")
-        for theJob in jobList.fetchall():
+                                ORDER BY HourType ASC, HoursNeeded ASC""")
+        
+        theJobs = jobList.fetchall()
+        for theJob in theJobs:
             if theJob[2] == "D":
                 if "Reception" in theJob[1]:
                     jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
@@ -39,10 +42,9 @@ def linkJob():
     return jobs, maxpriority
 
 
-jobStack, maxPriority = linkJob()
-staffDict, levelNums = linkStaff()
+jobStack, maxPriority = linkJob(levelNums)
+
 
 while not jobStack.isEmpty():
     jobQueue = jobStack.pop()
-    
-print(levelNums)
+
