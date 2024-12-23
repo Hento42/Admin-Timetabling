@@ -47,4 +47,17 @@ jobStack, maxPriority = linkJob(levelNums)
 
 while not jobStack.isEmpty():
     jobQueue = jobStack.pop()
-
+    while not jobQueue.isEmpty():
+        theJob = jobQueue.deQueue()
+        
+        # Need to find all available staff
+        # When program is complete will be already in order of least staff availability 
+        # Work out the different staff hour records - need to add data to table for that
+        # Pick a staff member with not many hours comparatively
+        # Must have right level for job
+        # Must be covered enough based on the HourType code given
+        # Covered for the correct number of hours
+        # Check which days are needed
+        # Factor in supervisors/trainers
+        # Add trainees in where possible with other job objects, but only when possible 
+        # Prioritise admin where level given in that way
