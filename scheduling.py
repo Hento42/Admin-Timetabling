@@ -6,7 +6,7 @@ con = sqlite3.connect("databases.db") # Connecting to the database
 editor = con.cursor()   # Linking to the database
 
 staffDict, levelNums = linkStaff()
-
+print(levelNums)
 def linkJob(pLevels):
     
     jobs = Stack([])
@@ -25,6 +25,24 @@ def linkJob(pLevels):
                                 ORDER BY HourType ASC, HoursNeeded ASC""")
         
         theJobs = jobList.fetchall()
+        print(theJobs)
+        index = 0
+        while index != len(theJobs)-1:
+            if theJobs[index][7] != theJobs[index+1][7]:
+                levelOne = levelNums[theJobs[index][7]]
+                levelTwo = levelNums[theJobs[index+1][7]]
+                if levelTwo > levelOne:
+                    temp = theJobs[index]
+                    theJobs[index] = theJobs[index+1]
+                    theJobs[index+1] = temp
+                else:
+                    index += 1
+            else:
+                index += 1
+                
+        print(theJobs)
+        print()
+        
         for theJob in theJobs:
             if theJob[2] == "D":
                 if "Reception" in theJob[1]:
@@ -50,8 +68,8 @@ while not jobStack.isEmpty():
     while not jobQueue.isEmpty():
         theJob = jobQueue.deQueue()
         
+        
         # Need to find all available staff
-        # When program is complete will be already in order of least staff availability 
         # Work out the different staff hour records - need to add data to table for that
         # Pick a staff member with not many hours comparatively
         # Must have right level for job

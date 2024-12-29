@@ -416,9 +416,10 @@ def linkStaff():
                          ORDER BY StaffCode ASC""")
 
     staff = {}
-    levelNums = [["DIS",0,0,0],["HUR",0],["SCR",0,0,0],["ADM",0,0,0],["WSC",0,0]]
+    levelNums = [["DIS",0,0,0,0],["HUR",0,0],["SCR",0,0,0,0],["ADM",0,0,0,0],["WSC",0,0,0],["ALL",0]]
     
     for record in staffList.fetchall():
+        levelNums[-1][-1] += 1
         hourList = []
         for i in range(9,19):
             hourList.append(record[i])
@@ -428,6 +429,7 @@ def linkStaff():
             count += 1
             if record[ind] > 0:
                 levelNums[count][record[ind]] += 1
+                levelNums[count][-1] += 1
 
         if record[19] == 0:
             staff[record[0]] = FullHours(record[0],record[1],record[2],{"DIS":record[3],"HUR":record[4],"SCR":record[5],"ADM":record[6],"WSC":record[7]},
