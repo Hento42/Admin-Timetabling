@@ -29,9 +29,9 @@ def linkJob(pLevels):
         index = 0
         while index != len(theJobs)-1:
             if theJobs[index][7] != theJobs[index+1][7]:
-                levelOne = levelNums[theJobs[index][7]]
-                levelTwo = levelNums[theJobs[index+1][7]]
-                if levelTwo > levelOne:
+                levelOne = levelNums[theJobs[index][7]][theJobs[index][8]]
+                levelTwo = levelNums[theJobs[index+1][7]][theJobs[index+1][8]]
+                if levelOne > levelTwo:
                     temp = theJobs[index]
                     theJobs[index] = theJobs[index+1]
                     theJobs[index+1] = temp
@@ -46,13 +46,13 @@ def linkJob(pLevels):
         for theJob in theJobs:
             if theJob[2] == "D":
                 if "Reception" in theJob[1]:
-                    jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+                    jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
                 else:
-                    jobQueue.enQueue(DailyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+                    jobQueue.enQueue(DailyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
             elif theJob[2] == "W":
-                jobQueue.enQueue(WeeklyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+                jobQueue.enQueue(WeeklyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
             elif theJob[2] == "M":
-                jobQueue.enQueue(MonthlyJob(theJob[3],False,theJob[0],theJob[1],theJob[6],theJob[7],theJob[4],theJob[5]))
+                jobQueue.enQueue(MonthlyJob(theJob[3],False,theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
 
         jobs.push(jobQueue)
     
@@ -70,7 +70,7 @@ while not jobStack.isEmpty():
         
         
         # Need to find all available staff
-        # Work out the different staff hour records - need to add data to table for that
+        # Work out the different staff hour records
         # Pick a staff member with not many hours comparatively
         # Must have right level for job
         # Must be covered enough based on the HourType code given
