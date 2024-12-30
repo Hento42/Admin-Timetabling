@@ -35,7 +35,8 @@ editor.execute("CREATE TABLE Jobs ("
                "DaysNeeded TEXT,"
                "Priority INTEGER,"
                "LevelNum INTEGER,"
-               "LevelNeeded INTEGER)")
+               "LevelNeeded INTEGER,"
+               "RecordName TEXT)")
 
 
 editor.execute("CREATE TABLE Week ("
@@ -121,24 +122,24 @@ editor.execute("""INSERT INTO ExtraHours VALUES
 
 
 editor.execute("""INSERT INTO Jobs VALUES
-               (0, "Reception 1", "D", 10.5, 1, "ALL", 1, -1, -1),
-               (1, "Reception 2", "D", 10.5, 0, "ALL", 0, -1, -1),
-               (2, "Reception 3", "D", 10.5, 2, "ALL", 4, 0, 1),
-               (3, "Reception 4", "D", 10.5, 3, "SOME", 5, -1, -1),
-               (4, "Dispensary", "D", 10.5, 0, "ALL", 0, 0, 2),
-               (5, "Dispensary Help", "D", 10.5, 2, "SOME", 4, 0, 1),
-               (6, "Hurley 1", "D", 10.5, 0, "ALL", 0, 1, 1),
-               (7, "Hurley 2", "D", 10.5, 1, "ALL", 1, 1, 1),
-               (8, "Hurley 3", "W", 10.5, 2, "ANY", 5, 1, 1),
-               (9, "Admin 1", "D", 10.5, 1, "ALL", 1, 3, 2),
-               (10, "Admin 2", "D", 10.5, 1, "ALL", 3, 3, 2),
-               (11, "Extra Admin 1", "D", 10.5, 3, "ALL", 6, -1, -1),
-               (12, "Extra Admin 2", "D", 10.5, 3, "ALL", 6, -1, -1),
-               (13, "Non-Workflow Scanning", "W", 2, 0, "ANY", 4, -1, -1),
-               (14, "Workflow Scanning", "D", 4, 0, "ALL", 1, 4, 2),
-               (15, "Weekly Scripts", "W", 4, 1, "FR", 2, 2, 1),
-               (16, "Monthly Scripts", "M", 2, 1, "TDB", 2, 2, 2),
-               (17, "New Registrations", "W", 3, 2, "ANY", 2, -1, -1)""")
+               (0, "Reception 1", "D", 10.5, 1, "ALL", 1, -1, -1, "Reception"),
+               (1, "Reception 2", "D", 10.5, 0, "ALL", 0, -1, -1, "Reception"),
+               (2, "Reception 3", "D", 10.5, 2, "ALL", 4, 0, 1, "Reception"),
+               (3, "Reception 4", "D", 10.5, 3, "SOME", 5, -1, -1, "Reception"),
+               (4, "Dispensary", "D", 10.5, 0, "ALL", 0, 0, 2, "Dispensary"),
+               (5, "Dispensary Help", "D", 10.5, 2, "SOME", 4, 0, 1, "Dispensary"),
+               (6, "Hurley 1", "D", 10.5, 0, "ALL", 0, 1, 1, "Hurley"),
+               (7, "Hurley 2", "D", 10.5, 1, "ALL", 1, 1, 1, "Hurley"),
+               (8, "Hurley 3", "W", 10.5, 2, "ANY", 5, 1, 1, "Hurley"),
+               (9, "Admin 1", "D", 10.5, 1, "ALL", 1, 3, 2, "Admin"),
+               (10, "Admin 2", "D", 10.5, 1, "ALL", 3, 3, 2, "Admin"),
+               (11, "Extra Admin 1", "D", 10.5, 3, "ALL", 6, -1, -1, "Admin"),
+               (12, "Extra Admin 2", "D", 10.5, 3, "ALL", 6, -1, -1, "Admin"),
+               (13, "Non-Workflow Scanning", "W", 2, 0, "ANY", 4, -1, -1, "Scanning"),
+               (14, "Workflow Scanning", "D", 4, 0, "ALL", 1, 4, 2, "Scanning"),
+               (15, "Weekly Scripts", "W", 4, 1, "FR", 2, 2, 1, "Scripts"),
+               (16, "Monthly Scripts", "M", 2, 1, "TDB", 2, 2, 2, "Scripts"),
+               (17, "New Registrations", "W", 3, 2, "ANY", 2, -1, -1, "NewRegistrations")""")
 
 
 editor.execute("""INSERT INTO HoursRecord VALUES
