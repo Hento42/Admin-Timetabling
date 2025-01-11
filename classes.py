@@ -230,7 +230,7 @@ class ZeroHours(Staff):
 # Parent class for the job, with most attributes and methods defined    
 # A large amount of defensive programming was used to reduce the risk of a severe error.
 class Job(object):
-    def __init__(self,code:int,desc:str,priority:int,levelNum:int,levelNeedeed:int,hourType:int,daysNeeded:str):
+    def __init__(self,code:int,desc:str,priority:int,levelNum:int,levelNeedeed:int,hourType:int,daysNeeded:str,recordName:str):
         self._jobCode = code        
         self._hourType = hourType
         self.__description = desc
@@ -238,6 +238,7 @@ class Job(object):
         self.__levelNum = levelNum
         self.__levelNeeded = levelNeedeed
         self.__days = daysNeeded
+        self.__recordName = recordName
 
     def getLevelNum(self):
         return self._jobCode, self.__levelNum, self.__levelNeeded
@@ -250,6 +251,9 @@ class Job(object):
 
     def getDays(self):
         return self._jobCode, self.__days
+    
+    def getRecord(self):
+        return self.__recordName
 
     def changePriority(self, newPriority):
         try:
@@ -286,9 +290,9 @@ class Job(object):
 # Subclass for the jobs which are needed daily. This includes a new attribute of hoursPerDay, which refers to the number of
 # hours needed every day. 
 class DailyJob(Job):
-    def __init__(self,dayHours:int,code,desc,priority,levelNum,levelNeeded,hourType,daysNeeded):
+    def __init__(self,dayHours:int,code,desc,priority,levelNum,levelNeeded,hourType,daysNeeded,recordName):
         self.__hoursPerDay = dayHours
-        super().__init__(code,desc,priority,levelNum,levelNeeded,hourType,daysNeeded)
+        super().__init__(code,desc,priority,levelNum,levelNeeded,hourType,daysNeeded,recordName)
 
     def getHours(self):
         return self._jobCode, self.__hoursPerDay, self._hourType
@@ -304,9 +308,9 @@ class DailyJob(Job):
 # Subclass for the weekly jobs, including the number of hours needed in the week
 # Validation is in use to ensure the number of hours entered doesn't exceed the maximum possible
 class WeeklyJob(Job):
-    def __init__(self, weekHours:int, code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded):
+    def __init__(self, weekHours:int, code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded,recordName):
         self.__weekHours = weekHours
-        super().__init__(code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded)
+        super().__init__(code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded,recordName)
 
     def getHours(self):
         return self._jobCode, self.__weekHours, self._hourType
@@ -326,10 +330,10 @@ class WeeklyJob(Job):
 # Subclass for the small number of jobs thast are monthly. This includes the hours needed, similarly to the 
 # previous subclasses, but also whether the job is complete for the month, so it isn't rescheduled if so
 class MonthlyJob(Job):
-    def __init__(self, hoursNeeded:int, complete:bool, code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded):
+    def __init__(self, hoursNeeded:int, complete:bool, code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded,recordName):
         self.__hours = hoursNeeded
         self.__done = complete
-        super().__init__(code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded)
+        super().__init__(code, desc, priority, levelNum, levelNeeded, hourType, daysNeeded,recordName)
 
     def getHours(self):
         return self._jobCode, self.__hours, self._hourType
@@ -359,9 +363,9 @@ class MonthlyJob(Job):
 # Subclass specifically for reception, since it requires the extra attribute of the desk number. This is an inhertance chain
 # of 3, which is the largest chain that should be used, so it won't go any further.
 class Reception(DailyJob):
-    def __init__(self,desk:int,dayHours,code,desc,priority,levelNum, levelNeeded, hourType, daysNeeded):
+    def __init__(self,desk:int,dayHours,code,desc,priority,levelNum, levelNeeded, hourType, daysNeeded,recordName):
         self.__desk = desk
-        super().__init__(dayHours,code,desc,priority,levelNum, levelNeeded, hourType, daysNeeded)
+        super().__init__(dayHours,code,desc,priority,levelNum, levelNeeded, hourType, daysNeeded,recordName)
     
     def getDesk(self):
         return self._jobCode, self.__desk

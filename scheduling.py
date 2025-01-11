@@ -5,8 +5,9 @@ import sqlite3, datetime as D, calendar as C
 con = sqlite3.connect("databases.db") # Connecting to the database
 editor = con.cursor()   # Linking to the database
 
+theDate = D.date.today()
+
 staffDict, levelNums = linkStaff()
-print(levelNums)
 def linkJob(pLevels):
     
     jobs = Stack([])
@@ -58,20 +59,56 @@ def linkJob(pLevels):
 
 jobStack, maxPriority = linkJob(levelNums)
 
+LEVELKEY = {0:"DIS", 1:"HUR", 2:"SCR", 3:"ADM", 4:"WSC"}  # Constant for conversion between the different level identifiers
+DAYS = ["MO","TU","WE","TH","FR"]
 
-while not jobStack.isEmpty():
-    jobQueue = jobStack.pop()
-    while not jobQueue.isEmpty():
-        theJob = jobQueue.deQueue()
+for day in DAYS:
+    while not jobStack.isEmpty():       # Making its way down the stack
+        jobQueue = jobStack.pop()
         
-        
-        # Need to find all available staff
-        # Work out the different staff hour records
-        # Pick a staff member with not many hours comparatively
-        # Must have right level for job
-        # Must be covered enough based on the HourType code given
-        # Covered for the correct number of hours
-        # Check which days are needed
-        # Factor in supervisors/trainers
-        # Add trainees in where possible with other job objects, but only when possible 
-        # Prioritise admin where level given in that way
+        while not jobQueue.isEmpty():       # Making its way through the queue
+            theJob = jobQueue.deQueue()
+            
+            possibleStaff = []
+            jobNum, levelNum, levelVal = theJob.getLevelNum()       # Collecting the values of the level for the job
+            
+            if levelNum != -1 and levelVal != -1:
+                
+                for key in staffDict.keys():                    # Iterating through all the staff to check which are able to do the job
+                    theID, levels = staffDict[key].getLevel()
+                    
+                    if levels[LEVELKEY[levelVal]] == levelVal:
+                        possibleStaff.append([key,staffDict[key]])
+            else:
+                for key in staffDict.keys():
+                    possibleStaff.append([key,staffDict[key]])
+                    
+            print(possibleStaff)
+            
+            newList = []
+            recordName = theJob.getRecord()
+            staffTable = editor.execute(f"""SELECT StaffCode, {recordName}
+                                    FROM HoursRecord
+                                    ORDER BY {recordName} DESC""")
+            staffList = staffTable.fetchall()
+            print(staffList)
+            
+            for staffMem in possibleStaff:
+                minHours = 999999
+                
+                
+            
+            
+                
+            
+            
+            # Work out the different staff hour records
+            # Pick a staff member with not many hours comparatively
+            # Must have right level for job
+            # Must be covered enough based on the HourType code given
+            # Covered for the correct number of hours
+            # Check which days are needed
+            # Factor in supervisors/trainers
+            # Add trainees in where possible with other job objects, but only when possible 
+            # Prioritise admin where level given in that way
+            # Changover of jobs between 12:00 and 13:30, lunch not needed
