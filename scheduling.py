@@ -111,4 +111,4 @@ for day in DAYS:
             # Factor in supervisors/trainers
             # Add trainees in where possible with other job objects, but only when possible 
             # Prioritise admin where level given in that way
-            # Changover of jobs between 12:00 and 13:30, lunch not needed
+            # Changeover of jobs between 12:00 and 13:30, lunch not needed as worked out by staff
