@@ -159,4 +159,22 @@ editor.execute("""INSERT INTO HoursRecord VALUES
                (13,0,0,0,0,0,0,0,0),
                (14,0,0,0,0,0,0,0,0)""")
 
+
+editor.execute("""INSERT INTO Attendance VALUES
+               (0,"True","True","True","True","True"),
+               (1,"True","True","True","True","True"),
+               (2,"True","True","True","True","True"),
+               (3,"True","True","True","True","True"),
+               (4,"True","True","True","True","True"),
+               (5,"True","True","True","True","True"),
+               (6,"True","True","True","True","True"),
+               (7,"True","True","True","True","True"),
+               (8,"True","True","True","True","True"),
+               (9,"True","True","True","True","True"),
+               (10,"True","True","True","True","True"),
+               (11,"True","True","True","True","True"),
+               (12,"True","True","True","True","True"),
+               (13,"True","True","True","True","True"),
+               (14,"True","True","True","True","True")""")
+
 con.commit()
