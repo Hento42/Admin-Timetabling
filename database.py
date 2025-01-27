@@ -59,11 +59,11 @@ editor.execute("CREATE TABLE AnnualLeave ("
 
 editor.execute("CREATE TABLE Attendance ("
                "StaffCode INTEGER PRIMARY KEY,"
-               "Monday TEXT,"
-               "Tuesday TEXT,"
-               "Wednesday TEXT,"
-               "Thursday TEXT,"
-               "Friday TEXT)")
+               "Mon TEXT,"
+               "Tue TEXT,"
+               "Wed TEXT,"
+               "Thur TEXT,"
+               "Fri TEXT)")
 
 
 editor.execute("CREATE TABLE HoursRecord ("
