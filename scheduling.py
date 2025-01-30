@@ -43,18 +43,120 @@ def linkJob(pLevels):
         for theJob in theJobs:
             if theJob[2] == "D":
                 if "Reception" in theJob[1]:
-                    jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
+                    jobQueue.enQueue(Reception(int(theJob[1][-1]),theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5],theJob[9]))
                 else:
-                    jobQueue.enQueue(DailyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
+                    jobQueue.enQueue(DailyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5],theJob[9]))
             elif theJob[2] == "W":
-                jobQueue.enQueue(WeeklyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
+                jobQueue.enQueue(WeeklyJob(theJob[3],theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5],theJob[9]))
             elif theJob[2] == "M":
-                jobQueue.enQueue(MonthlyJob(theJob[3],False,theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5]))
+                jobQueue.enQueue(MonthlyJob(theJob[3],False,theJob[0],theJob[1],theJob[6],theJob[7],theJob[8],theJob[4],theJob[5],theJob[9]))
 
         jobs.push(jobQueue)
     
 
     return jobs, maxpriority
+
+
+def testing():
+    staffList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+    for staffCode in staffList:
+        theTest = editor.execute(f"""SELECT StaffDetails.StaffCode
+                        FROM StaffDetails
+                        WHERE StaffDetails.StaffCode = {staffCode}
+                        AND (StaffDetails.MonStart = '00:00:00'
+                        OR StaffDetails.MonFinish = '00:00:00')""")
+        print(theTest.fetchall())
+testing()
+    
+
+
+
+def UpdateAttendance(pDay,pDate):
+    theStaff = editor.execute("""SELECT StaffCode
+                                FROM StaffDetails""")
+    StaffList = theStaff.fetchall()
+
+    if pDay == "Mon":
+
+        for staffCode in StaffList:
+            print(staffCode[0])
+            print(type(staffCode[0]))
+            editor.execute(f"""UPDATE Attendance
+                            SET Mon = 'False'
+                            WHERE Attendance.StaffCode = {staffCode[0]}
+                            AND {staffCode[0]} IN (SELECT StaffDetails.StaffCode
+                                    FROM StaffDetails
+                                    WHERE StaffDetails.MonStart = '00:00:00'
+                                    OR StaffDetails.MonFinish = '00:00:00')
+                                    """)
+            
+    elif pDay == "Tue":
+
+        for staffCode in StaffList:
+            print(staffCode[0])
+            print(type(staffCode[0]))
+            editor.execute(f"""UPDATE Attendance
+                            SET Tue = 'False'
+                            WHERE Attendance.StaffCode = {staffCode[0]}
+                            AND {staffCode[0]} IN (SELECT StaffDetails.StaffCode
+                                    FROM StaffDetails
+                                    WHERE StaffDetails.TueStart = '00:00:00'
+                                    OR StaffDetails.TueFinish = '00:00:00')
+                                    """)
+            
+    elif pDay == "Wed":
+
+        for staffCode in StaffList:
+            print(staffCode[0])
+            print(type(staffCode[0]))
+            editor.execute(f"""UPDATE Attendance
+                            SET Wed = 'False'
+                            WHERE Attendance.StaffCode = {staffCode[0]}
+                            AND {staffCode[0]} IN (SELECT StaffDetails.StaffCode
+                                    FROM StaffDetails
+                                    WHERE StaffDetails.WedStart = '00:00:00'
+                                    OR StaffDetails.WedFinish = '00:00:00')
+                                    """)
+            
+    elif pDay == "Thur":
+
+        for staffCode in StaffList:
+            print(staffCode[0])
+            print(type(staffCode[0]))
+            editor.execute(f"""UPDATE Attendance
+                            SET Thur = 'False'
+                            WHERE Attendance.StaffCode = {staffCode[0]}
+                            AND {staffCode[0]} IN (SELECT StaffDetails.StaffCode
+                                    FROM StaffDetails
+                                    WHERE StaffDetails.ThurStart = '00:00:00'
+                                    OR StaffDetails.ThurFinish = '00:00:00')
+                                    """)
+            
+    elif pDay == "Fri":
+
+        for staffCode in StaffList:
+            print(staffCode[0])
+            print(type(staffCode[0]))
+            editor.execute(f"""UPDATE Attendance
+                            SET Fri = 'False'
+                            WHERE Attendance.StaffCode = {staffCode[0]}
+                            AND {staffCode[0]} IN (SELECT StaffDetails.StaffCode
+                                    FROM StaffDetails
+                                    WHERE StaffDetails.FriStart = '00:00:00'
+                                    OR StaffDetails.FriFinish = '00:00:00')
+                                    """)
+        
+
+        
+
+        
+UpdateAttendance("Mon","1")
+UpdateAttendance("Tue","1")
+UpdateAttendance("Wed","1")        
+UpdateAttendance("Thur","1")
+UpdateAttendance("Fri","1")
+
+con.commit()
 
 
 jobStack, maxPriority = linkJob(levelNums)
