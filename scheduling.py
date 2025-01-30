@@ -57,17 +57,9 @@ def linkJob(pLevels):
     return jobs, maxpriority
 
 
-def testing():
-    staffList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-    for staffCode in staffList:
-        theTest = editor.execute(f"""SELECT StaffDetails.StaffCode
-                        FROM StaffDetails
-                        WHERE StaffDetails.StaffCode = {staffCode}
-                        AND (StaffDetails.MonStart = '00:00:00'
-                        OR StaffDetails.MonFinish = '00:00:00')""")
-        print(theTest.fetchall())
-testing()
-    
+def resetAttendance():
+    editor.execute("""UPDATE Attendance
+                            SET Mon = 'True', Tue = 'True', Wed = 'True', Thur = 'True', Fri = 'True'""")
 
 
 
@@ -86,8 +78,10 @@ def UpdateAttendance(pDay,pDate):
                             WHERE Attendance.StaffCode = {staffCode[0]}
                             AND {staffCode[0]} IN (SELECT StaffDetails.StaffCode
                                     FROM StaffDetails
-                                    WHERE StaffDetails.MonStart = '00:00:00'
-                                    OR StaffDetails.MonFinish = '00:00:00')
+                                    JOIN AnnualLeave 
+                                    ON StaffDetails.StaffCode = AnnualLeave.StaffCode
+                                    WHERE (StaffDetails.MonStart = '00:00:00'
+                                    OR StaffDetails.MonFinish = '00:00:00'))
                                     """)
             
     elif pDay == "Tue":
@@ -148,7 +142,7 @@ def UpdateAttendance(pDay,pDate):
         
 
         
-
+resetAttendance()
         
 UpdateAttendance("Mon","1")
 UpdateAttendance("Tue","1")
