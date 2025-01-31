@@ -62,6 +62,16 @@ def resetAttendance():
                             SET Mon = 'True', Tue = 'True', Wed = 'True', Thur = 'True', Fri = 'True'""")
 
 
+def testing():
+    staffList = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+    for staffCode in staffList:
+        theTest = editor.execute(f"""SELECT StaffDetails.StaffCode
+                        FROM StaffDetails, AnnualLeave
+                        
+                        """)
+        print(theTest.fetchall())
+testing()
+
 
 def UpdateAttendance(pDay,pDate):
     theStaff = editor.execute("""SELECT StaffCode
@@ -72,7 +82,6 @@ def UpdateAttendance(pDay,pDate):
 
         for staffCode in StaffList:
             print(staffCode[0])
-            print(type(staffCode[0]))
             editor.execute(f"""UPDATE Attendance
                             SET Mon = 'False'
                             WHERE Attendance.StaffCode = {staffCode[0]}
@@ -87,8 +96,6 @@ def UpdateAttendance(pDay,pDate):
     elif pDay == "Tue":
 
         for staffCode in StaffList:
-            print(staffCode[0])
-            print(type(staffCode[0]))
             editor.execute(f"""UPDATE Attendance
                             SET Tue = 'False'
                             WHERE Attendance.StaffCode = {staffCode[0]}
@@ -101,8 +108,6 @@ def UpdateAttendance(pDay,pDate):
     elif pDay == "Wed":
 
         for staffCode in StaffList:
-            print(staffCode[0])
-            print(type(staffCode[0]))
             editor.execute(f"""UPDATE Attendance
                             SET Wed = 'False'
                             WHERE Attendance.StaffCode = {staffCode[0]}
@@ -115,8 +120,6 @@ def UpdateAttendance(pDay,pDate):
     elif pDay == "Thur":
 
         for staffCode in StaffList:
-            print(staffCode[0])
-            print(type(staffCode[0]))
             editor.execute(f"""UPDATE Attendance
                             SET Thur = 'False'
                             WHERE Attendance.StaffCode = {staffCode[0]}
@@ -129,8 +132,6 @@ def UpdateAttendance(pDay,pDate):
     elif pDay == "Fri":
 
         for staffCode in StaffList:
-            print(staffCode[0])
-            print(type(staffCode[0]))
             editor.execute(f"""UPDATE Attendance
                             SET Fri = 'False'
                             WHERE Attendance.StaffCode = {staffCode[0]}
