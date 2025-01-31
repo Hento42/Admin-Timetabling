@@ -62,18 +62,6 @@ def resetAttendance():
                             SET Mon = 'True', Tue = 'True', Wed = 'True', Thur = 'True', Fri = 'True'""")
 
 
-def testing():
-    theTest = editor.execute(f"""SELECT AnnualLeave.StaffCode
-                                FROM AnnualLeave
-                                JOIN StaffDetails ON AnnualLeave.StaffCode = StaffDetails.StaffCode
-                                WHERE (AnnualLeave.StartDate = '2025-01-31'
-                                AND AnnualLeave.EndDate = '2025-01-31'
-                                AND AnnualLeave.StartTime <= StaffDetails.MonStart
-                                AND AnnualLeave.EndTime >= StaffDetails.MonFinish)
-                    
-                    """)
-    print(theTest.fetchall())
-testing()
 
 
 def UpdateAttendance(pDay,pDates):
@@ -85,16 +73,10 @@ def UpdateAttendance(pDay,pDates):
 
         editor.execute(f"""UPDATE Attendance
                         SET Mon = 'False'
-                        WHERE (Attendance.StaffCode IN (SELECT StaffDetails.StaffCode
+                        WHERE Attendance.StaffCode IN (SELECT StaffDetails.StaffCode
                                 FROM StaffDetails
                                 WHERE (StaffDetails.MonStart = '00:00:00'
                                 OR StaffDetails.MonFinish = '00:00:00'))
-                        OR Attendance.StaffCode IN (SELECT AnnualLeave.StaffCode
-                                FROM AnnualLeave
-                                JOIN StaffDetails ON AnnualLeave.StaffCode = StaffDetails.StaffCode
-                                WHERE (AnnualLeave.StartDate = AnnualLeave.EndDate = {pDates[0]}
-                                AND AnnualLeave.StartTime <= StaffDetails.MonStart
-                                AND AnnualLeave.EndTime >= StaffDetails.MonFinish)))
                                 """)
             
     elif pDay == "Tue":
@@ -106,6 +88,36 @@ def UpdateAttendance(pDay,pDates):
                                 WHERE StaffDetails.TueStart = '00:00:00'
                                 OR StaffDetails.TueFinish = '00:00:00')
                                 """)
+        
+    elif pDay == "Wed":
+
+        editor.execute(f"""UPDATE Attendance
+                        SET Wed = 'False'
+                        WHERE Attendance.StaffCode IN (SELECT StaffDetails.StaffCode
+                                FROM StaffDetails
+                                WHERE StaffDetails.WedStart = '00:00:00'
+                                OR StaffDetails.WedFinish = '00:00:00')
+                       """)
+
+    elif pDay == "Thur":
+
+        editor.execute(f"""UPDATE Attendance
+                        SET Thur = 'False'
+                        WHERE Attendance.StaffCode IN (SELECT StaffDetails.StaffCode
+                                FROM StaffDetails
+                                WHERE StaffDetails.ThurStart = '00:00:00'
+                                OR StaffDetails.ThurFinish = '00:00:00')
+                       """)
+                       
+    elif pDay == "Fri":
+
+        editor.execute(f"""UPDATE Attendance
+                        SET Fri = 'False'
+                        WHERE Attendance.StaffCode IN (SELECT StaffDetails.StaffCode
+                                FROM StaffDetails
+                                WHERE StaffDetails.FriStart = '00:00:00'
+                                OR StaffDetails.FriFinish = '00:00:00')
+                       """)
 
 
 
