@@ -124,7 +124,7 @@ def UpdateAttendance(pDay,pDates):
         
 resetAttendance()
         
-UpdateAttendance("Mon",['2025-01-31','fyu'])
+UpdateAttendance("Mon",[1])
 UpdateAttendance("Tue",[1])
 UpdateAttendance("Wed",[1])        
 UpdateAttendance("Thur",[1])
@@ -159,7 +159,7 @@ for day in DAYS:
                 for key in staffDict.keys():
                     possibleStaff.append([key,staffDict[key]])
                     
-            print(possibleStaff)
+            #print(possibleStaff)
             
             newList = []
             recordName = theJob.getRecord()
@@ -167,7 +167,7 @@ for day in DAYS:
                                     FROM HoursRecord
                                     ORDER BY {recordName} DESC""")
             staffList = staffTable.fetchall()
-            print(staffList)
+            #print(staffList)
             
             for staffMem in possibleStaff:
                 minHours = 999999
