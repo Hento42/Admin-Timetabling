@@ -52,6 +52,8 @@ editor.execute("CREATE TABLE AnnualLeave ("
                "StaffCode INTEGER,"
                "StartDate date,"
                "EndDate date,"
+               "StartTime time,"
+               "EndTime time,"
                "PRIMARY KEY (StaffCode, StartDate))")
 
 
@@ -177,6 +179,6 @@ editor.execute("""INSERT INTO Attendance VALUES
 
 
 editor.execute("""INSERT INTO AnnualLeave VALUES
-               (1,'2025-01-31 08:00:00', '2025-01-31 18:30:00')""")
+               (1,'2025-01-31', '2025-01-31', '08:00:00', '18:30:00')""")
 
 con.commit()
