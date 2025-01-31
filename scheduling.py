@@ -65,9 +65,6 @@ def resetAttendance():
 
 
 def UpdateAttendance(pDay,pDates):
-    theStaff = editor.execute("""SELECT StaffCode
-                                FROM StaffDetails""")
-    StaffList = theStaff.fetchall()
 
     if pDay == "Mon":
 
