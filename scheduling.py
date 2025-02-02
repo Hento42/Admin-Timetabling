@@ -142,32 +142,18 @@ for day in DAYS:
         while not jobQueue.isEmpty():       # Making its way through the queue
             theJob = jobQueue.deQueue()
             
-            possibleStaff = []
-            jobNum, levelNum, levelVal = theJob.getLevelNum()       # Collecting the values of the level for the job
-            
-            if levelNum != -1 and levelVal != -1:
+            if day == "MO":
+                possibleStaff = editor.execute("""SELECT StaffCode
+                                            FROM Attendance
+                                            WHERE Mon = 'True'""")
                 
-                for key in staffDict.keys():                    # Iterating through all the staff to check which are able to do the job
-                    theID, levels = staffDict[key].getLevel()
-                    
-                    if levels[LEVELKEY[levelVal]] == levelVal:
-                        possibleStaff.append([key,staffDict[key]])
-            else:
-                for key in staffDict.keys():
-                    possibleStaff.append([key,staffDict[key]])
-                    
-            #print(possibleStaff)
+                print(possibleStaff.fetchall())
             
-            newList = []
-            recordName = theJob.getRecord()
-            staffTable = editor.execute(f"""SELECT StaffCode, {recordName}
-                                    FROM HoursRecord
-                                    ORDER BY {recordName} DESC""")
-            staffList = staffTable.fetchall()
-            #print(staffList)
             
-            for staffMem in possibleStaff:
-                minHours = 999999
+            
+ 
+            
+
                 
                 
             
