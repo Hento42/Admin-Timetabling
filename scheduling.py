@@ -141,13 +141,28 @@ for day in DAYS:
         
         while not jobQueue.isEmpty():       # Making its way through the queue
             theJob = jobQueue.deQueue()
+            availableStaff = []
+            jobNum, levelNum, levelVal = theJob.getLevelNum()
             
             if day == "MO":
                 possibleStaff = editor.execute("""SELECT StaffCode
                                             FROM Attendance
                                             WHERE Mon = 'True'""")
                 
-                print(possibleStaff.fetchall())
+                theStaff = possibleStaff.fetchall()
+
+                for staff in theStaff:
+                    theID, levels = staffDict[staff[0]].getLevel()
+
+                    if levelNum != -1 and levelVal != -1:
+                        if levels[LEVELKEY[levelNum]] >= levelVal:
+                            availableStaff.append([staff[0], staffDict[staff[0]]])
+                    else:
+                        availableStaff.append([staff[0], staffDict[staff[0]]])
+
+            print(availableStaff)
+            
+
             
             
             
