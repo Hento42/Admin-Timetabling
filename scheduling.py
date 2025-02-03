@@ -148,17 +148,33 @@ for day in DAYS:
                 possibleStaff = editor.execute("""SELECT StaffCode
                                             FROM Attendance
                                             WHERE Mon = 'True'""")
+            if day == "TU":
+                possibleStaff = editor.execute("""SELECT StaffCode
+                                            FROM Attendance
+                                            WHERE Tue = 'True'""")
+            if day == "WE":
+                possibleStaff = editor.execute("""SELECT StaffCode
+                                            FROM Attendance
+                                            WHERE Wed = 'True'""")
+            if day == "TH":
+                possibleStaff = editor.execute("""SELECT StaffCode
+                                            FROM Attendance
+                                            WHERE Thur = 'True'""")
+            if day == "FR":
+                possibleStaff = editor.execute("""SELECT StaffCode
+                                            FROM Attendance
+                                            WHERE Fri = 'True'""")
                 
-                theStaff = possibleStaff.fetchall()
+            theStaff = possibleStaff.fetchall()
 
-                for staff in theStaff:
-                    theID, levels = staffDict[staff[0]].getLevel()
+            for staff in theStaff:
+                theID, levels = staffDict[staff[0]].getLevel()
 
-                    if levelNum != -1 and levelVal != -1:
-                        if levels[LEVELKEY[levelNum]] >= levelVal:
-                            availableStaff.append([staff[0], staffDict[staff[0]]])
-                    else:
+                if levelNum != -1 and levelVal != -1:
+                    if levels[LEVELKEY[levelNum]] >= levelVal:
                         availableStaff.append([staff[0], staffDict[staff[0]]])
+                else:
+                    availableStaff.append([staff[0], staffDict[staff[0]]])
 
             print(availableStaff)
             
