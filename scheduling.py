@@ -7,6 +7,7 @@ editor = con.cursor()   # Linking to the database
 
 theDate = D.date.today()
 
+
 staffDict, levelNums = linkStaff()
 def linkJob(pLevels):
     
@@ -183,10 +184,44 @@ for day in DAYS:
                     else:
                         availableStaff[staff[0]] =  staffDict[staff[0]]
 
-                print(availableStaff)
+                #print(availableStaff)
                 #print(type(availableStaff[0]).__name__)
-                print(theJob.getRecord())
-                print(theJob.getDescription())
+                #print(theJob.getRecord())
+                #print(theJob.getDescription())
+                startStaff = {}
+                otherStaff = {}
+
+                for key in availableStaff.keys():
+                    theTimes = editor.execute(f"""SELECT MonStart, TueStart, WedStart, ThurStart, FriStart
+                                              FROM StaffDetails
+                                              WHERE StaffCode = {key}""")
+                    timeList = theTimes.fetchall()
+                    index = DAYS.index(day)
+
+                    startTime = timeList[0][index]
+                    #print(startTime)
+
+                    busy = editor.execute(f"""SELECT StartTime, EndTime
+                                          FROM Week
+                                          WHERE StaffCode = {key}
+                                          AND Day = '{day}'""")
+                    
+                    busyList = busy.fetchall()
+                    if len(busyList) > 0:
+                        if startTime >= "08:00:00" and startTime <= "13:00:00":     # Checking to see if 
+                            pass
+                        else:
+
+                            if startTime == "08:00:00":
+                                startStaff[key] = availableStaff[key]
+                            else:
+                                otherStaff[key] = availableStaff[key]
+                
+                #print(startStaff)
+                #print(otherStaff)
+
+
+
             elif jobDays == "TDB":
                 pass
 
