@@ -31,7 +31,7 @@ class Stack(object):
 class Queue(object):
     def __init__(self,items):
         self.__items = items
-        self.__len = len(items) - 1
+        self.__len = len(items)
 
     def isEmpty(self):
         return self.__len == 0
