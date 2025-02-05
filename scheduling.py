@@ -130,59 +130,69 @@ UpdateAttendance("Fri",[1])
 con.commit()
 
 
-jobStack, maxPriority = linkJob(levelNums)
+
 
 LEVELKEY = {0:"DIS", 1:"HUR", 2:"SCR", 3:"ADM", 4:"WSC"}  # Constant for conversion between the different level identifiers
 DAYS = ["MO","TU","WE","TH","FR"]
 
 for day in DAYS:
+    jobStack, maxPriority = linkJob(levelNums)
+    print((day.upper()))
+    print( )
+    print( )
     while not jobStack.isEmpty():       # Making its way down the stack
         jobQueue = jobStack.pop()
         
         while not jobQueue.isEmpty():       # Making its way through the queue
             theJob = jobQueue.deQueue()
-            availableStaff = []
-            jobNum, levelNum, levelVal = theJob.getLevelNum()
+            jobID, jobDays = theJob.getDays()
             
-            if day == "MO":
-                possibleStaff = editor.execute("""SELECT StaffCode
-                                            FROM Attendance
-                                            WHERE Mon = 'True'""")
-            if day == "TU":
-                possibleStaff = editor.execute("""SELECT StaffCode
-                                            FROM Attendance
-                                            WHERE Tue = 'True'""")
-            if day == "WE":
-                possibleStaff = editor.execute("""SELECT StaffCode
-                                            FROM Attendance
-                                            WHERE Wed = 'True'""")
-            if day == "TH":
-                possibleStaff = editor.execute("""SELECT StaffCode
-                                            FROM Attendance
-                                            WHERE Thur = 'True'""")
-            if day == "FR":
-                possibleStaff = editor.execute("""SELECT StaffCode
-                                            FROM Attendance
-                                            WHERE Fri = 'True'""")
+            if jobDays == "ALL" or jobDays == "SOME" or jobDays == "ANY" or day in jobDays:
+                availableStaff = {}
+                jobNum, levelNum, levelVal = theJob.getLevelNum()
                 
-            theStaff = possibleStaff.fetchall()
+                if day == "MO":
+                    possibleStaff = editor.execute("""SELECT StaffCode
+                                                FROM Attendance
+                                                WHERE Mon = 'True'""")
+                elif day == "TU":
+                    possibleStaff = editor.execute("""SELECT StaffCode
+                                                FROM Attendance
+                                                WHERE Tue = 'True'""")
+                elif day == "WE":
+                    possibleStaff = editor.execute("""SELECT StaffCode
+                                                FROM Attendance
+                                                WHERE Wed = 'True'""")
+                elif day == "TH":
+                    possibleStaff = editor.execute("""SELECT StaffCode
+                                                FROM Attendance
+                                                WHERE Thur = 'True'""")
+                elif day == "FR":
+                    possibleStaff = editor.execute("""SELECT StaffCode
+                                                FROM Attendance
+                                                WHERE Fri = 'True'""")
+                    
+                theStaff = possibleStaff.fetchall()
 
-            for staff in theStaff:
-                theID, levels = staffDict[staff[0]].getLevel()
+                for staff in theStaff:
+                    theID, levels = staffDict[staff[0]].getLevel()
 
-                if levelNum != -1 and levelVal != -1:
-                    if levels[LEVELKEY[levelNum]] >= levelVal:
-                        availableStaff.append([staff[0], staffDict[staff[0]]])
-                else:
-                    availableStaff.append([staff[0], staffDict[staff[0]]])
+                    if levelNum != -1 and levelVal != -1:
+                        if levels[LEVELKEY[levelNum]] >= levelVal:
+                            availableStaff[staff[0]] =  staffDict[staff[0]]
+                    else:
+                        availableStaff[staff[0]] =  staffDict[staff[0]]
 
-            print(availableStaff)
+                print(availableStaff)
+                #print(type(availableStaff[0]).__name__)
+                print(theJob.getRecord())
+                print(theJob.getDescription())
+            elif jobDays == "TDB":
+                pass
+
+            
             
 
-            
-            
-            
- 
             
 
                 
