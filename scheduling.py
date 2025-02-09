@@ -58,14 +58,14 @@ def linkJob(pLevels):
     return jobs, maxpriority
 
 
-def resetAttendance():
+def resetAttendance():                  # Resetting the Attendance table so it can be repopulated with False
     editor.execute("""UPDATE Attendance
                             SET Mon = 'True', Tue = 'True', Wed = 'True', Thur = 'True', Fri = 'True'""")
 
 
 
 
-def UpdateAttendance(pDay,pDates):
+def UpdateAttendance(pDay,pDates):              # Checking each Staff members Attendance based on their hours worked to update Attendance accordingly
 
     if pDay == "Mon":
 
@@ -152,6 +152,7 @@ for day in DAYS:
                 availableStaff = {}
                 jobNum, levelNum, levelVal = theJob.getLevelNum()
                 
+                                            # Collecting all the staff working on each day
                 if day == "MO":
                     possibleStaff = editor.execute("""SELECT StaffCode
                                                 FROM Attendance
@@ -208,8 +209,8 @@ for day in DAYS:
                     
                     busyList = busy.fetchall()
                     if len(busyList) > 0:
-                        if startTime >= "08:00:00" and startTime <= "13:00:00":     # Checking to see if 
-                            pass
+                        if startTime >= "08:00:00" and startTime <= "13:00:00":     # Checking to see if Staff start time is between 8 and 1 - in the morning part
+                            print("0")
                         else:
 
                             if startTime == "08:00:00":
@@ -217,8 +218,8 @@ for day in DAYS:
                             else:
                                 otherStaff[key] = availableStaff[key]
                 
-                #print(startStaff)
-                #print(otherStaff)
+                print(startStaff)
+                print(otherStaff)
 
 
 
