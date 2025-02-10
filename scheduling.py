@@ -191,6 +191,7 @@ for day in DAYS:
                 #print(theJob.getDescription())
                 startStaff = {}
                 otherStaff = {}
+                theKeys = [14]
 
                 for key in availableStaff.keys():
                     theTimes = editor.execute(f"""SELECT MonStart, TueStart, WedStart, ThurStart, FriStart
@@ -207,17 +208,24 @@ for day in DAYS:
                                           WHERE StaffCode = {key}
                                           AND Day = '{day}'""")
                     
+                    # For the morning, checking which staff are available for jobs needed from 8
+                    
                     busyList = busy.fetchall()
                     if len(busyList) > 0:
-                        if startTime >= "08:00:00" and startTime <= "13:00:00":     # Checking to see if Staff start time is between 8 and 1 - in the morning part
-                            print("0")
-                        else:
+                        if busyList[0][index] >= "08:00:00" and busyList[0][index] <= "13:00:00":     # Checking to see if the staff's job start time is between 8 and 1 - in the morning part
+                            theKeys.append(key)
 
-                            if startTime == "08:00:00":
-                                startStaff[key] = availableStaff[key]
-                            else:
-                                otherStaff[key] = availableStaff[key]
-                
+
+                    if startTime != "08:00:00":
+                        theKeys.append(key)
+
+                    if key not in theKeys:
+                        startStaff[key] = availableStaff[key]
+                    
+
+                    
+
+
                 print(startStaff)
                 print(otherStaff)
 
