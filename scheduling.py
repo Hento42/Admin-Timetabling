@@ -65,7 +65,9 @@ def resetAttendance():                  # Resetting the Attendance table so it c
 
 
 
-def UpdateAttendance(pDay,pDates):              # Checking each Staff members Attendance based on their hours worked to update Attendance accordingly
+def UpdateAttendance(pDay):              # Checking each Staff members Attendance based on their hours worked to update Attendance accordingly
+
+    theDate = D.date.today()
 
     if pDay == "Mon":
 
@@ -122,11 +124,11 @@ def UpdateAttendance(pDay,pDates):              # Checking each Staff members At
         
 resetAttendance()
         
-UpdateAttendance("Mon",[1])
-UpdateAttendance("Tue",[1])
-UpdateAttendance("Wed",[1])        
-UpdateAttendance("Thur",[1])
-UpdateAttendance("Fri",[1])
+UpdateAttendance("Mon")
+UpdateAttendance("Tue")
+UpdateAttendance("Wed")        
+UpdateAttendance("Thur")
+UpdateAttendance("Fri")
 
 con.commit()
 
